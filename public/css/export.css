@@ -1,0 +1,21 @@
+table{
+    border: 1px solid #2A3542;
+    width: 100%;
+}
+
+thead{
+    border: 1px solid #2A3542;
+}
+th,td{
+    text-align: center;
+}
+h2{
+    text-align: center;
+    width: 100%;
+    border: 1px solid #9d9d9d;
+    background-color: #9d9d9d;
+}
+h3{
+    text-align: right;
+    width: 100%;
+}
