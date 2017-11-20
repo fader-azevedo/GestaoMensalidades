@@ -218,13 +218,14 @@
                 </div>
                 <div class="box-footer">
                     <form id="form1" method="post">
+                        {{csrf_field()}}
                         <button class="btn btn-danger">Cancelar</button>
                         <div class="pull-right">
                             <input type="hidden" id="valorP" name="valor">
                             <input type="hidden" value="numerico" name="forma">
                             <input type="hidden" value="12345" name="numrecibo">
                             <input type="hidden" value="2017-09-09 00:00:00" name="dataP">
-                            <input id="butSalvar" value="Salvar" type="submit" class="btn btn-success">
+                            <input id="butSalvar" value="Salvar" type="button" class="btn btn-success">
                             {{--<button id="butSalvar" type="submit" class="btn btn-success" style="margin-left: 5px">&nbsp;&nbsp;&nbsp;Salvar&nbsp;&nbsp;</button>--}}
                         </div>
                     </form>
@@ -493,7 +494,8 @@
                 }
             });
 
-            $('#form1').submit(function () {
+            $('#butSalvar').click(function () {
+//                alert('olasd');
                 $.ajax({
                     url: '/api/pagar',
                     type: 'POST',

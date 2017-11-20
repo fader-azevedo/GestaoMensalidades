@@ -21,6 +21,7 @@ class AlunoController extends Controller{
 
     public function index(){
         $listaAluno = Aluno::all();
+//        $this->aluno->c
         return view('aluno.listar');
     }
 

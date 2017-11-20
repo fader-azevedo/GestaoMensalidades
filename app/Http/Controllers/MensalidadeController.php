@@ -48,6 +48,8 @@ class MensalidadeController extends Controller{
     }
 
     public function pagar(Request $request){
+
+//        $this->aluno->create();
 //        $valor = $_POST['valor'];
 //        $data = $_POST['dataP'];
 //
