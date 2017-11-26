@@ -133,10 +133,7 @@
                     {{--input responsavel em armazenar o valor de divida--}}
                     <input type="hidden" id="valorDivida">
                     {{--/*input responsavel por armazenar o valor a pagar de cada mensalidade*/--}}
-                    {{--input de vvalor a pagar no momento de pagamento--}}
-                    {{--<input type="hidden" id="valorP">--}}
-                    {{--input que concebe o nome do curso--}}
-
+                    <input type="hidden" id="valorP">
                     <input type="hidden" id="mesAdiantado">
                 </div>
             </div>
@@ -240,24 +237,14 @@
                         {{csrf_field()}}
                         <button class="btn btn-danger" type="button">Cancelar</button>
                         <div class="pull-right">
-                            <input type="hidden" id="valorP" name="valor" value="5000">
-                            <input type="hidden" value="numerico" name="forma" >
-                            <input type="hidden" value="123245" name="numrecibo">
-                            <input type="hidden" value="2017-09-09 00:00:00" name="dataP">
-{{--//                            data: {'valorTotal':valorPorMes,'estado':'pago','mes':meses[c], 'anoPago': '2017','idPagamento':10,'idAluno': idAluno, 'curso': curso},--}}
-
-                            {{--Para Mensalidade--}}
-
-                            {{--<input type="hidden" id="valorAPagar">--}}
                             <input type="hidden" id="valorMensal" name="valorTotal">
                             <input type="hidden" id="estado" name="estado" value="pago">
                             <input type="hidden" id="mes" name="mes">
                             <input type="hidden" id="anoPago" name="anoPago" value="2017">
-                            <input type="hidden" id="idMensalidade" name="idMensalidade" value="1">
-                            <input type="hidden" id="idPagamento" name="idPagamento" value="4">
                             <input type="hidden" id="idAluno" name="idAluno">
                             <input type="hidden" id="nomeCurso" name="curso">
-
+                            <input type="hidden" value="numerico" name="forma" >
+                            <input type="hidden" value="123245" name="numrecibo">
                             <input id="butSalvar" value="Salvar" type="submit" class="btn btn-success">
                         </div>
                     </form>
@@ -520,30 +507,6 @@
                     });
                 }
 
-                $.ajax({
-                    url: '/salvarPagamento',
-                    type: 'POST',
-                    data: new FormData(this),
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    success: function (idPagamento) {
-                        document.getElementById('idPagamento').value = idPagamento;
-                        if(valorDivida !== 0){
-                            valorAPagar = valorAPagar-valorDivida;
-                            $.ajax({
-                                url: '/api/updateMensalidade',
-                                type: 'POST',
-                                data: {'idAluno': idAluno,'mes':meses[0], 'curso': curso, 'ano': '2017','valor':valorDivida},
-                                success: function (rs) {
-//                                    alert(rs);
-                                    actulizarInerface(curso);
-                                }
-                            });
-                        }
-                    }
-                });
-
 
                 if(valorDivida !== 0) {
                     for (var c = 1; c < meses.length; c++) {
@@ -564,7 +527,6 @@
                 }else {
                     for (var x = 0; x < meses.length; x++) {
                         document.getElementById('mes').value = meses[x];
-//                        alert('salva '+meses[x]);
                         $.ajax({
                             url: '/salvarMensalidade',
                             type: 'POST',
@@ -583,32 +545,3 @@
         });
     </script>
 @endsection
-
-
-
-{{--for(var c=0; c< meses.length; c++){--}}
-{{--document.getElementById('mes').value= meses[c];--}}
-{{--if(valorDivida !== 0){--}}
-{{--valorAPagar = valorAPagar-valorDivida;--}}
-{{--$.ajax({--}}
-{{--url: '/api/updateMensalidade',--}}
-{{--type: 'POST',--}}
-{{--data: {'idAluno': idAluno,'mes':meses[0], 'curso': curso, 'ano': '2017','valor':valorDivida},--}}
-{{--success: function (rs) {--}}
-{{--alert(rs);--}}
-{{--}--}}
-{{--});--}}
-{{--valorDivida =0;--}}
-{{--}else{--}}
-{{--$.ajax({--}}
-{{--url: '/salvarMensalidade',--}}
-{{--type: 'POST',--}}
-{{--data: new FormData(this),--}}
-{{--processData: false,--}}
-{{--contentType: false,--}}
-{{--cache: false,--}}
-{{--success: function (rs) {--}}
-{{--alert(rs);--}}
-{{--}--}}
-{{--});--}}
-{{--}--}}

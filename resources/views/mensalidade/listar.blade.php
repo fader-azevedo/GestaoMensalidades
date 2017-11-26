@@ -109,8 +109,8 @@
 
     <div class="nav-tabs-custom" style="background-color: #f2f2f2">
         <ul class="nav nav-tabs ">
-            <li class="pull-left active"><a data-slide-to="0" href="#carousellDiv" data-toggle="tab"><i class="fa fa-list"></i>&nbsp;Todas</a></li>
-            <li><a data-slide-to="1" href="#carousellDiv" data-toggle="tab"><i class="fa fa-users"></i>&nbsp;Por Aluno</a></li>
+            <li class="pull-left active"><a data-slide-to="0" href="#carousellDiv" data-toggle="tab"><i style="color: #00a7d0" class="fa fa-list"></i>&nbsp;Todas</a></li>
+            <li><a data-slide-to="1" href="#carousellDiv" data-toggle="tab"><i style="color: #00a7d0" class="fa fa-user"></i>&nbsp;Por Aluno</a></li>
             <li style="width: 100px;" class="tooltipped" data-tooltip="Selecione o Ano">
                 <div >
                     <a class="myIcon"><i class="zmdi zmdi-calendar"></i></a>
