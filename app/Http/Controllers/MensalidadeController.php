@@ -78,7 +78,11 @@ class MensalidadeController extends Controller{
     }
 
     public function listarPorAluno(){
-        $mensalidade = PagamntoMensalidade::query()->join('alunos','pagamnto_mensalidades.idAluno','=','alunos.id')->select('pagamnto_mensalidades.estado as mesEstado','alunos.*','pagamnto_mensalidades.*')->where('idAluno',$_POST['idAluno'])->where('curso',$_POST['curso'])->where('anoPago',$_POST['ano'])->get();
+        $mensalidade = PagamntoMensalidade::query()->
+        join('alunos','pagamnto_mensalidades.idAluno','=','alunos.id')
+            ->select('pagamnto_mensalidades.estado as mesEstado','alunos.*','pagamnto_mensalidades.*')
+//            ->where('idAluno',$_POST['idAluno'])->where('curso',$_POST['curso'])->where('anoPago',$_POST['ano'])->get();
+            ->where('idAluno',$_POST['idAluno'])->where('anoPago',$_POST['ano'])->get();
 
         /*Para registo de mensalidade*/
         $mesesPagos = '';
@@ -97,7 +101,7 @@ class MensalidadeController extends Controller{
         $inscricao = Inscricao::query()
             ->join('alunos','inscricaos.idAluno','=','alunos.id')
             ->join('cursos','inscricaos.idCurso','=','cursos.id')
-            ->select('cursos.*','cursos.id as idCurso')
+            ->select('cursos.*','cursos.id as idCurso','alunos.foto as picture')
             ->where('idAluno',$_POST['idAluno'])->where('estado','=','inscrito')->where('ano',$_POST['ano'])->get();
         return  response()->json(array('mensalidade'=> $mensalidade,'mesesNao'=>$mesNaoP,'mesesNaoPagos'=>$mesesNaoPAgos,'inscricao'=>$inscricao/*,'divida'=>$divida*/));
     }

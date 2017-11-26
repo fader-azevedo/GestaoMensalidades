@@ -316,7 +316,7 @@
                     success: function (rs) {
                         document.getElementById('idAluno').value = idAluno;
 //                        alert(rs.mensalidade[0].mesEstado);
-                        {{--document.getElementById('fotoCaminho').value =  '{{asset('img/upload/')}}'.concat('/' + rs.mensalidade[0].foto);--}}
+                        document.getElementById('fotoCaminho').value =  '{{asset('img/upload/')}}'.concat('/' + rs.inscricao[0].picture);
                         $('.cr').remove();
                         $('.mes').remove();
                         $('#actual').remove();
@@ -339,7 +339,7 @@
                             document.getElementById('nomeCurso').value=nomeCurso;
                             for (var men = 0; men < rs.mensalidade.length; men++) {
                                 /*Quandod fez adiantados*/
-                                                        alert(rs.mensalidade[men].mesEstado);
+//                                                        alert(rs.mensalidade[men].mesEstado);
 
                                 if (valorMensal !== rs.mensalidade[men].valorTotal && (nomeCurso === rs.mensalidade[men].curso)) {
                                     valorDivida = valorMensal - rs.mensalidade[men].valorTotal;
@@ -404,7 +404,7 @@
                     success: function (dados) {
                         var mesess = ''; var control=0;
                         for (var m = 0; m < dados.meses.length; m++) {
-                            alert(dados.meses[m].mes);
+//                            alert(dados.meses[m].mes);
                             /*Quando nao fez adiantamento*/
                             if (dados.meses[m].estado === 'pago') {
                                 $('#DivMeses').append(' <div class="mes"><label class="label label-success">' + dados.meses[m].mes + '</label></div>');
@@ -488,7 +488,7 @@
                 }
             });
 
-            function actulizarInerface() {
+            function actulizarInerface(curso) {
                 $('.mes').remove();
                 $('#actual').remove();
                 $('.ms').remove();
@@ -537,7 +537,7 @@
                                 data: {'idAluno': idAluno,'mes':meses[0], 'curso': curso, 'ano': '2017','valor':valorDivida},
                                 success: function (rs) {
 //                                    alert(rs);
-                                    actulizarInerface();
+                                    actulizarInerface(curso);
                                 }
                             });
                         }
@@ -560,7 +560,7 @@
                             }
                         });
                     }
-                    actulizarInerface();
+                    actulizarInerface(curso);
                 }else {
                     for (var x = 0; x < meses.length; x++) {
                         document.getElementById('mes').value = meses[x];
@@ -577,7 +577,7 @@
                             }
                         });
                     }
-                    actulizarInerface();
+                    actulizarInerface(curso);
                 }
             });
         });
