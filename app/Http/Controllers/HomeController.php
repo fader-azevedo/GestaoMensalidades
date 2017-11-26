@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 class HomeController extends Controller{
 
     public function index(){
-        $numMensal = Mensalidade::all()->count();
+//        $numMensal = Mensalidade::all()->count();
         $numAluno = Aluno::all()->count();
         $numDisc = Disciplina::all()->count();
         $numCuro = Curso::all()->count();
@@ -32,7 +32,7 @@ class HomeController extends Controller{
 //        $meses = Mes::all();
 //        $ms = response()->json(array($meses));
 
-        return view('template.home',['preIns'=>$alunosPreIn,'numMensal'=>$numMensal, 'numAlunos' => $alunnosInscritos,'numDisc'=>$numDisc,'numCursos'=>$numCuro,'numTurma'=>$numTurma]);
+        return view('template.home',['preIns'=>$alunosPreIn,'numAlunos' => $alunnosInscritos,'numDisc'=>$numDisc,'numCursos'=>$numCuro,'numTurma'=>$numTurma]);
     }
 
     public function getNotification(){
