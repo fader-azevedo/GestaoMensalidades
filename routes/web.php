@@ -107,9 +107,8 @@ Route::get('exportAluno',function (){
     $ano = $_GET['ano'];
 
     $mensalidade = PagamntoMensalidade::query()
-        ->join('pagamentos','pagamnto_mensalidades.idPagamento','=','pagamentos.id')
         ->join('alunos','pagamnto_mensalidades.idAluno','=','alunos.id')
-        ->select('pagamnto_mensalidades.estado as mesEstado','alunos.*','alunos.codigo as cdd','pagamentos.*','pagamnto_mensalidades.*')
+        ->select('pagamnto_mensalidades.estado as mesEstado','alunos.*','alunos.codigo as cdd','pagamnto_mensalidades.*')
         ->where('idAluno',$_GET['idAluno'])->where('anoPago',$_GET['ano'])->get();
 
     $mesesPagos = '';

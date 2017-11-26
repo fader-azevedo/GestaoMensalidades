@@ -123,22 +123,22 @@
                     var valorPago =0; var valorMensal;
                     $('.tr').remove();
                     $('.ss').remove();
-                    for (var j = 0; j < rs.mensalidade.length; j++) {
-                        if(nomeCurso ===rs.mensalidade[j].curso) {
-                            if(rs.mensalidade[j].mesEstado === 'pago') {
-                                $('#tabela2Corpo').append(" <tr class='tr'><td>" + rs.mensalidade[j].mes + "</td> " +
-                                    "<td>" + formatarData(new Date(rs.mensalidade[j].created_at)) + "</td><td><label style='font-size: 14px' class='label label-success'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + rs.mensalidade[j].mesEstado + "&nbsp;&nbsp;&nbsp;&nbsp;<i class='fa fa-check'></i></label></td>" +
-                                    "<td>" + rs.mensalidade[j].valorTotal + "</td><td>" +
+                    for (var j = 0; j < rs.mensalidade2.length; j++) {
+                        if(nomeCurso ===rs.mensalidade2[j].curso) {
+                            if(rs.mensalidade2[j].mesEstado === 'pago') {
+                                $('#tabela2Corpo').append(" <tr class='tr'><td>" + rs.mensalidade2[j].mes + "</td> " +
+                                    "<td>" + formatarData(new Date(rs.mensalidade2[j].created_at)) + "</td><td><label style='font-size: 14px' class='label label-success'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + rs.mensalidade2[j].mesEstado + "&nbsp;&nbsp;&nbsp;&nbsp;<i class='fa fa-check'></i></label></td>" +
+                                    "<td>" + rs.mensalidade2[j].valorTotal + "</td><td>" +
                                     "</tr>");
-                                valorMensal = rs.mensalidade[j].valorTotal;
+                                valorMensal = rs.mensalidade2[j].valorTotal;
                             }else{
                                 $('#tabela2Corpo').append(" <tr class='tr'><td>" + rs.mensalidade[j].mes + "</td> " +
-                                    "<td>" + formatarData(new Date(rs.mensalidade[j].created_at)) + "</td><td><label style='font-size: 14px' class='label label-warning'>" + rs.mensalidade[j].mesEstado + "&nbsp;<i class='fa fa-times'></i></label></td>" +
+                                    "<td>" + formatarData(new Date(rs.mensalidade[j].created_at)) + "</td><td><label style='font-size: 14px' class='label label-warning'>" + rs.mensalidade2[j].mesEstado + "&nbsp;<i class='fa fa-times'></i></label></td>" +
                                     "<td>" + rs.mensalidade[j].valorTotal + "</td><td>" +
                                 "</tr>");
                             }
                         }
-                        valorPago += rs.mensalidade[j].valorTotal;
+                        valorPago += rs.mensalidade2[j].valorTotal;
                     }
                     var valorTotal = valorMensal * (intervalo + 1);
 //                    var rk = document.getElementById('tabela2Corpo').rows.length;
