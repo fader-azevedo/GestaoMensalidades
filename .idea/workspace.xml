@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5b268160-0c69-433f-871d-a633f48a9471" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/PagamntoMensalidade.php" afterPath="$PROJECT_DIR$/app/PagamntoMensalidade.php" />
-    </list>
+    <list default="true" id="5b268160-0c69-433f-871d-a633f48a9471" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -139,7 +135,7 @@
       <file leaf-file-name="registar.blade.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/mensalidade/registar.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
+            <state relative-caret-position="-34">
               <caret line="138" column="18" lean-forward="true" selection-start-line="138" selection-start-column="18" selection-end-line="139" selection-end-column="14" />
               <folding>
                 <element signature="e#8901#8927#0#HTML" expanded="true" />
@@ -476,15 +472,15 @@
       <workItem from="1510622468581" duration="12615000" />
       <workItem from="1510998138315" duration="1296000" />
       <workItem from="1511023892387" duration="66000" />
-      <workItem from="1511702898783" duration="6579000" />
+      <workItem from="1511702898783" duration="6658000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27052000" />
+    <option name="totallyTimeSpent" value="27131000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="754" extended-state="7" />
+    <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2560606" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1202,7 +1198,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/mensalidade/registar.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
+        <state relative-caret-position="-34">
           <caret line="138" column="18" lean-forward="true" selection-start-line="138" selection-start-column="18" selection-end-line="139" selection-end-column="14" />
           <folding>
             <element signature="e#8901#8927#0#HTML" expanded="true" />
