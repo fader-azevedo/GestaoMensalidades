@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Aluno;
+use App\Contacto;
 use App\Inscricao;
 use App\Mensalidade;
 use Illuminate\Http\Request;
@@ -20,27 +21,20 @@ class AlunoController extends Controller{
     }
 
     public function index(){
-        $listaAluno = Aluno::all();
-//        $this->aluno->c
-        return view('aluno.listar');
+        $listaAluno = Inscricao::query()->
+        join('alunos','inscricaos.idAluno','=','alunos.id')->distinct()
+            ->select('alunos.*')->where('estado','=','inscrito')->get();
+        return view('aluno.listar',compact('listaAluno'));
     }
 
 
     public function listar(Request $request){
 
         $al = new Aluno();
-        $al->create();
     }
 
-    public function getDisciplinasAluno(){
-
+    public function getContacto(){
+        $contacto = Contacto::query()->find($_POST['id']);
     }
 
-    public function getCursosAluno(){
-        $inscricao = Inscricao::query()->join('alunos','inscricaos.idAluno','=','alunos.id')
-            ->join('cursos','inscricaos.idCurso','=','cursos.id')
-            ->select('cursos.nome as curso','alunos.*','cursos.id as idCurso')
-            ->where('idAluno',$_POST['idAluno'])->where('ano',$_POST['ano'])->get();
-        return response()->json(array('dados'=>$inscricao));
-    }
 }

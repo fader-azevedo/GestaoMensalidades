@@ -6,6 +6,8 @@
         <meta name="description" content="">
         <meta name="author" content="Fader Azevedo">
         <meta name="keyword" content="">
+        {{--<meta name="csrf-token" content="{{csrf_token()}}">--}}
+        <meta name="_token" content="{{csrf_token()}}">
 
         <title>Gestão de Mensalidades 2</title>
 
@@ -48,42 +50,25 @@
                             <li style="border: none" class="dropdown notifications-menu">
                                 <a href="#" style="border: none" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-bell-o"></i>
-                                    <span class="label label-warning">10</span>
+                                    <span class="label label-warning">{{\App\Inscricao::query()->where('estado','<>','inscrito')->count()}}</span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li class="header">You have 10 notifications</li>
+                                    <li class="header"></li>
                                     <li>
                                         <!-- inner menu: contains the actual data -->
                                         <ul class="menu">
                                             <li>
                                                 <a href="#">
-                                                    <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                                                    <i class="fa fa-users text-aqua"></i>{{\App\Inscricao::query()->where('estado','<>','inscrito')->count()}} Candidato Fez Pre-Inscricao
                                                 </a>
                                             </li>
                                             <li>
                                                 <a href="#">
-                                                    <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
-                                                    page and may cause design problems
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-users text-red"></i> 5 new members joined
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-user text-red"></i> You changed your username
+                                                    <i class="fa fa-warning text-yellow"></i>
                                                 </a>
                                             </li>
                                         </ul>
                                     </li>
-                                    <li class="footer"><a href="#">View all</a></li>
                                 </ul>
                             </li>
                             <!-- Tasks: style can be found in dropdown.less -->
@@ -99,7 +84,7 @@
                                         <img src="{{asset('img/logo1.jpg')}}" class="img-circle" alt="">
                                         <p style="color: #3c3f41">
                                            So Nos
-                                            <small>Member since Nov. 2012</small>
+                                            <small></small>
                                         </p>
                                     </li>
                                     <!-- Menu Footer-->
@@ -162,10 +147,10 @@
             </div>
             <!-- /.content-wrapper -->
             <footer class="main-footer">
-                <div class="pull-right hidden-xs">
-                    <b>Versão</b> 0.1
-                </div>
-                <strong>Sistema de Gestão de Mensalidades<a href=""></a>.</strong>
+                {{--<div class="pull-right hidden-xs">--}}
+                    {{--<b>Versão</b> 0.1--}}
+                {{--</div>--}}
+                <strong class="centered">Sistema de Gestão de Mensalidades<a href=""></a>.</strong>
             </footer>
         </div>
         <script type="text/javascript" src="{!! asset('jquery/dist/jquery.min.js')!!}" ></script>
@@ -184,7 +169,14 @@
         <script type="text/javascript" src="{!! asset('datatables.net/js/jquery.dataTables.min.js')!!}"></script>
         <script type="text/javascript" src="{!! asset('datatables.net-bs/js/dataTables.bootstrap.min.js')!!}"></script>
         <script>
+            function formatarData(date) {
+                var meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
+                var dia = date.getDate();
+                var mesIndex = date.getMonth();
+                var ano = date.getFullYear();
+                return dia+'-'+meses[mesIndex]+'-'+ano;
+            }
 
 
         //        $('.tooltipped').tooltip({delay: 50});

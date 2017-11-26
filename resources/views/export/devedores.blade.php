@@ -21,18 +21,19 @@
 
             <?php $total =0.0?>
             <tbody>
-                @foreach($dados as $alu)
+
+                @for($d =0; $d<$vezes; $d++)
                     <tr>
-                        <td>{{$alu->nomeAluno.' '.$alu->apelido}}</td>
-                        <td>{{$alu->turma}}</td>
-                        <td>{{$alu->curso}}</td>
-                        <td>{{number_format($alu->divida,2).' Mt'}}</td>
-                        <?php $total +=$alu->divida ?>
+                        <td> {{$devedores[$d]->nomeAluno.' '.$devedores[$d]->apelido}}</td>
+                        <td> {{@substr($turma[$d],2,-2)}}</td>
+                        <td> {{$cursos[$d]}}</td>
+                        <td> {{@number_format(@substr($valor[$d],1,-1),2).' Mt'}}</td>
+                        <?php $total+= substr($valor[$d],1,-1)?>
                     </tr>
-                @endforeach
+                @endfor
             </tbody>
         </table>
-        <h3>Total: <?php echo number_format($total,2) ?></h3>
+        <h3>Total: <?php echo number_format($total,2) ?>&nbsp;Mt</h3>
         <h4 style="text-align: center;"><?php echo date('d/m/Y').' - '?>Sistema de Controlo de Mensalidades</h4>
     </body>
 </html>

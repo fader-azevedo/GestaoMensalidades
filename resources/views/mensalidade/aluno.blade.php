@@ -12,12 +12,12 @@
         </select>
     </div>
 
-    <div class="box box-widget widget-user">
+    <div class="box box-widget widget-user" >
         <div class="widget-user-header bg-aqua-active">
             {{--<p class="centered">Nome</p>--}}
         </div>
-        <div class="widget-user-image">
-            <img id="idFotoAluno" class="img-circle" src="{!! asset('img/user.jpg') !!}" alt="">
+        <div class="widget-user-image" id="divIMG">
+            <img id="idPicture" class="img-circle" src="{!! asset('img/user.jpg') !!}" alt="">
         </div>
         <div class="box-footer">
             <div class="row">
@@ -85,9 +85,9 @@
                 <span class="sr-only"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
-                <li><a style="cursor: pointer;" id="ExportExcel"><i style="color: green" class="fa fa-file-excel-o"></i>Excel</a></li>
+                <li><a style="cursor: pointer;" id="ExportExcel2"><i style="color: green" class="fa fa-file-excel-o"></i>Excel</a></li>
                 <li class="divider"></li>
-                <li><a style="cursor: pointer;" id="ExportPdf"><i style="color: red" class="fa fa-file-pdf-o"></i>Pdf</a></li>
+                <li><a style="cursor: pointer;" id="ExportPdf2f"><i style="color: red" class="fa fa-file-pdf-o"></i>Pdf</a></li>
             </ul>
         </div>
     </div>
@@ -99,12 +99,12 @@
             <th>Data de Pagamento</th>
             <th>Estado</th>
             <th>Valor Pago</th>
-            <th>Dívida</th>
         </tr>
         </thead>
         <tbody id="tabela2Corpo">
         </tbody>
     </table>
+    <input type="hidden" id="txtCurso">
 </div>
 
 @section('scripts2')
@@ -113,101 +113,94 @@
 
         /*buscar cursos de um aluno*/
 
+        function preencherTable(idAluno, nomeCurso, ano) {
+            $.ajax({
+                url: '/api/listarPorAluno',
+                type: 'POST',
+                data: {'idAluno': idAluno, 'ano': ano,'curso':nomeCurso},
+                success: function (rs) {
+
+                    var valorPago =0; var valorMensal;
+                    $('.tr').remove();
+                    $('.ss').remove();
+                    for (var j = 0; j < rs.mensalidade.length; j++) {
+                        if(nomeCurso ===rs.mensalidade[j].curso) {
+                            if(rs.mensalidade[j].mesEstado === 'pago') {
+                                $('#tabela2Corpo').append(" <tr class='tr'><td>" + rs.mensalidade[j].mes + "</td> " +
+                                    "<td>" + formatarData(new Date(rs.mensalidade[j].created_at)) + "</td><td><label style='font-size: 14px' class='label label-success'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + rs.mensalidade[j].mesEstado + "&nbsp;&nbsp;&nbsp;&nbsp;<i class='fa fa-check'></i></label></td>" +
+                                    "<td>" + rs.mensalidade[j].valorTotal + "</td><td>" +
+                                    "</tr>");
+                                valorMensal = rs.mensalidade[j].valorTotal;
+                            }else{
+                                $('#tabela2Corpo').append(" <tr class='tr'><td>" + rs.mensalidade[j].mes + "</td> " +
+                                    "<td>" + formatarData(new Date(rs.mensalidade[j].created_at)) + "</td><td><label style='font-size: 14px' class='label label-warning'>" + rs.mensalidade[j].mesEstado + "&nbsp;<i class='fa fa-times'></i></label></td>" +
+                                    "<td>" + rs.mensalidade[j].valorTotal + "</td><td>" +
+                                "</tr>");
+                            }
+                        }
+                        valorPago += rs.mensalidade[j].valorTotal;
+                    }
+                    var valorTotal = valorMensal * (intervalo + 1);
+//                    var rk = document.getElementById('tabela2Corpo').rows.length;
+                    var prc = (valorPago * 100) / valorTotal;
+                    document.getElementById('txtValorTotal').innerHTML = valorTotal;
+                    document.getElementById('valorPago').innerHTML = valorPago;
+                    document.getElementById('valorDivida').innerHTML = valorTotal - valorPago;
+                    document.getElementById('percPago').innerHTML = prc.toFixed(2) + '%';
+                    document.getElementById('barWidth').style.width = prc + '%';
+
+                    for(var n=0; n< rs.mesesNaoPagos.length;n++ ){
+                        $('#tabela2Corpo').append(" <tr class='tr'><td>" + rs.mesesNaoPagos[n].nome + "</td> " +
+                            "<td>" + formatarData(new Date()) + "</td><td><label style='font-size: 14px' class='label label-danger'>Não Pago&nbsp;<i class='fa fa-times'></i></label></td>" +
+                            "<td>" + 0.00 + "</td><td>" +
+                        "</tr>");
+                    }
+                }
+            });
+        }
+
         var intervalo = JSON.parse("{{json_encode($intervalo)}}");
-        var idAluno=0;
+        var idAluno=0;var ano;
         $('#inPutAluno').on('change',function () {
 
-            var ano = document.getElementById('selectAno').value;
+            ano = document.getElementById('selectAno').value;
             var op = $('option[value="'+$(this).val()+'"]');
              idAluno = op.length ? op.attr('id'):'';
             if(idAluno === '' ||  $('#inPutAluno').val().length=== 0){
                 return;
             }
+            $('#divIMG').addClass('collapsed-box').slideUp();
             $.ajax({
-                url: '/api/listarPorAluno',
+                url: '/api/getInscricao',
                 type: 'POST',
                 data: {'idAluno': idAluno, 'ano': ano},
                 success: function (rs) {
+                    if(rs.inscricao.length <=0){
+                        return;
+                    }
                     $('.crs').remove();
-                    document.getElementById('idFotoAluno').src = '{{asset('img/upload/')}}'.concat('/' + rs.foto);
-                    $('#inputCurso').append('<option id="'+rs.curso[0].idCurso+'" class="crs" selected value="'+rs.curso[0].nome+'">' + rs.curso[0].nome + '</option>');
-                    for (var c=1; c<rs.curso.length; c++) {
-                        $('#inputCurso').append('<option value="'+rs.curso[c].nome+'">' + rs.curso[c].nome + '</option>');
+                    $('#inputCurso').append('<option id="' + rs.inscricao[0].idCurso + '" class="crs" selected value="' + rs.inscricao[0].curso + '">' + rs.inscricao[0].curso + '</option>');
+                    for (var c = 1; c < rs.inscricao.length; c++) {
+                        $('#inputCurso').append('<option class="crs"  value="' + rs.inscricao[c].curso + '">' + rs.inscricao[c].curso + '</option>');
                     }
+                    preencherTable(idAluno,rs.inscricao[0].curso, ano);
+                    document.getElementById('txtCurso').value = rs.inscricao[0].curso;
 
-                    var valorMensal = rs.curso[0].valormensal;
-                    var valorTotal = valorMensal*(intervalo+1);
-                    $('.tr').remove();
-                    $('.ss').remove();
-                    if(rs.mensal.length <=0){
-                        $('#divTabela2').append('<h1 class="centered ss">Ainda Sem Registo</h1>');
-                    }else {
-                        for (var j = 0; j < rs.mensal.length; j++) {
-                            $('#tabela2Corpo').append(" <tr class='tr'><td>" + rs.mensal[j].mes + "</td> " +
-                                "<td>" + formatarData(new Date(rs.mensal[j].dataP)) + "</td><td>" + rs.mensal[j].mesEstado + "</td>" +
-                                "<td>"+rs.mensal[j].valorTotal+"</td><td>"+rs.mensal[j].divida+"</td></tr>");
-                        }
-                    }
-                    var rk = document.getElementById('tabela2Corpo').rows.length;
-                    var prc = ((valorMensal*rk) * 100)/valorTotal;
-                    document.getElementById('txtValorTotal').innerHTML = valorTotal;
-                    document.getElementById('valorPago').innerHTML = valorMensal*rk;
-                    document.getElementById('valorDivida').innerHTML = valorTotal-(valorMensal*rk);
-                    document.getElementById('percPago').innerHTML = prc.toFixed(2)+'%';
-                    document.getElementById('barWidth').style.width = prc+'%';
-
-                }
-            })
-        });
-
-        function preecherTabela(idAluno, idCurso,ano) {
-            $.ajax({
-                url: '/api/getMesesPorCurso',
-                type: 'POST',
-                data: {'idAluno':idAluno,'ano':ano,'idCurso':idCurso},
-                success: function (rs) {
-                    alert(rs.mensal[0].curso);
-//                    for (var c=0; c<rs.curso.length; c++) {
-//                        $('#inputCurso').append('<option value="'+rs.curso[c].nome+'">' + rs.curso[c].nome + '</option>');
-//                    }
-//                    var valorMensal = rs.curso[0].valormensal;
-//                    var valorTotal = valorMensal*(intervalo+1);
-//                    $('.tr').remove();
-//                    $('.ss').remove();
-//                    if(rs.mensal.length <=0){
-//                        $('#divTabela2').append('<h1 class="centered ss">Ainda Sem Registo</h1>');
-//                    }else {
-//                        for (var j = 0; j < rs.mensal.length; j++) {
-//                            $('#tabela2Corpo').append(" <tr class='tr'><td>" + rs.mensal[j].mes + "</td> " +
-//                                "<td>" + formatarData(new Date(rs.mensal[j].dataP)) + "</td><td>" + rs.mensal[j].mesEstado + "</td>" +
-//                                "<td>"+rs.mensal[j].valorTotal+"</td><td>"+rs.mensal[j].divida+"</td></tr>");
-//                        }
-//                    }
-//                    var rk = document.getElementById('tabela2Corpo').rows.length;
-//                    var prc = ((valorMensal*rk) * 100)/valorTotal;
-//                    document.getElementById('txtValorTotal').innerHTML = valorTotal;
-//                    document.getElementById('valorPago').innerHTML = valorMensal*rk;
-//                    document.getElementById('valorDivida').innerHTML = valorTotal-(valorMensal*rk);
-//                    document.getElementById('percPago').innerHTML = prc.toFixed(2)+'%';
-//                    document.getElementById('barWidth').style.width = prc+'%';
+                    document.getElementById('idPicture').src = '{{asset('img/upload/')}}'.concat('/' + rs.inscricao[0].picture);
+                    $('#divIMG').removeClass('collapsed-box').slideDown();
                 }
             });
-        }
+
+        });
 
 
-            {{--/*Buscar Dados de Alunos*/--}}
+        var nomeCurso;
         $('#inputCurso').on('change',function () {
+            ano = document.getElementById('selectAno').value;
             var op = $('option[value="'+$(this).val()+'"]');
-            idCurso = op.length ? op.attr('id'):'';
-
-
-            {{--var ano = document.getElementById('selectAno').value;--}}
-            {{--if(idAluno === 0){--}}
-                {{--return;--}}
-            {{--}--}}
-            {{--var intervalo = JSON.parse("{{json_encode($intervalo)}}");--}}
-
-
+            nomeCurso = op.length ? op.attr('value'):'';
+            document.getElementById('txtCurso').value = nomeCurso;
+            preencherTable(idAluno,nomeCurso,ano)
         });
 
         function formatarData(date) {
@@ -218,5 +211,19 @@
             var ano = date.getFullYear();
             return dia+'-'+meses[mesIndex]+'-'+ano;
         }
+
+        $('#ExportExcel2').click(function () {
+            var rowCountDev = document.getElementById('tabela2Corpo').rows.length;
+            if(rowCountDev <= 0){
+                return;
+            }
+            $('#tabela2').tableExport({type:'excel',escape:'false'});
+        });
+
+        $('#ExportPdf2f').click(function () {
+            var curso = document.getElementById('txtCurso').value;
+            window.location ='/exportAluno?idAluno='+idAluno+'&ano='+ano+'&curso='+curso+'';
+        })
+
     </script>
 @endsection

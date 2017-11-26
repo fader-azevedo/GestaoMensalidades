@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\TurmaAluno;
 use Illuminate\Database\Schema;
 use App\Aluno;
 use App\Curso;
@@ -35,7 +36,7 @@ class MensalidadeController extends Controller{
         $this->aluno = new Aluno();
         $this->numAlunos = Aluno::all()->count();
 
-
+        
         $anoActual = date('Y');
         $this->anos = Def_Mensalidade::query()->pluck('ano');
         $def = Def_Mensalidade::query()->where('ano',$anoActual)->get();
@@ -49,50 +50,18 @@ class MensalidadeController extends Controller{
 
     public function pagar(Request $request){
 
-//        $this->aluno->create();
-//        $valor = $_POST['valor'];
-//        $data = $_POST['dataP'];
-//
-
-//        $s = new Pagamento();
-//        $s->create();
-//
-//        $al = new Aluno();
-//        $al->create();
-
-//        $pg = Pagamento::query();
-//        $pg->valor = $request->valor;
-//        $pg->forma = $request->forma;
-//        $pg->numrecibo = $request->numrecibo;
-//        $pg->dataP = $request->dataP;
-
-//        $pg->saveOrFail();
-//        $s->create($request->all());
-
-//        try{
-////            $telefone->save();
-//            $p = new Pagamento();
-//            $p = $p::query()->create($request->all());
-//        }catch (Exception $e){
-//            return "Erro ".$e->getMessage();
-//        }
-
-
-
-//        $p->save1($arr);
-
-        return response()->json(array('dado'=>$request->valor));
-
-//        Pagamento::query()->create($p)
     }
 
 
     public function index(){
-        $alunos = Aluno::all();
+        $alunnosInscritos = Inscricao::query()->
+        join('alunos','inscricaos.idAluno','=','alunos.id')->distinct()->select('alunos.*')->where('estado','=','inscrito')->get();
+
         $mesesPagos = $this->getMesesPagos($this->anoDefido);
         $mesesAPagar = $this->getMesAPagar($this->anoDefido);
         $anosPay = $this->anos;
-        return view('mensalidade.listar',['valorMensal'=>$this->valorMensal,'valorTotal'=>$this->valorTotal, 'alu'=>$alunos,'numAlunos'=>$this->numAlunos,'anos'=>$anosPay,'mesesPagos'=>$mesesPagos,'mesesAPagar'=>$mesesAPagar,'intervalo'=>$this->intervalo]);
+//        return view('mensalidade.listar',['valorMensal'=>$this->valorMensal,'valorTotal'=>$this->valorTotal, 'alu'=>$alunnosInscritos,'numAlunos'=>$this->numAlunos,'anos'=>$anosPay,'mesesPagos'=>$mesesPagos,'mesesAPagar'=>$mesesAPagar,'intervalo'=>$this->intervalo]);
+        return view('mensalidade.listar',['alu'=>$alunnosInscritos,'anos'=>$anosPay,'mesesPagos'=>$mesesPagos,'mesesAPagar'=>$mesesAPagar,'intervalo'=>$this->intervalo]);
     }
 
     public function getMesesPorCurso(){
@@ -109,75 +78,107 @@ class MensalidadeController extends Controller{
     }
 
     public function listarPorAluno(){
-        $alun = Aluno::query()->where('id',$_POST['idAluno'])->first();
-//        $alun = Aluno::cr;
-        $mensalidade = PagamntoMensalidade::query()
-//            ->join('mensalidades','pagamnto_mensalidades.idMensalidade','=','mensalidades.id')
-            ->join('pagamentos','pagamnto_mensalidades.idPagamento','=','pagamentos.id')
-            ->join('alunos','pagamnto_mensalidades.idAluno','=','alunos.id')
-//            ->select('mensalidades.estado as mesEstado','alunos.*','mensalidades.*','pagamentos.*','pagamnto_mensalidades.*')
-            ->select('pagamnto_mensalidades.estado as mesEstado','alunos.*','pagamentos.*','pagamnto_mensalidades.*')
-            ->where('idAluno',$_POST['idAluno'])->where('anoPago',$_POST['ano'])->get();
+        $mensalidade = PagamntoMensalidade::query()->join('alunos','pagamnto_mensalidades.idAluno','=','alunos.id')->select('pagamnto_mensalidades.estado as mesEstado','alunos.*','pagamnto_mensalidades.*')->where('idAluno',$_POST['idAluno'])->where('curso',$_POST['curso'])->where('anoPago',$_POST['ano'])->get();
 
-        $this->valorMensal =40;
         /*Para registo de mensalidade*/
         $mesesPagos = '';
-        $def = Def_Mensalidade::query()->join('mes','def__mensalidades.mescomeco','=','mes.numero')->select('mes.*','def__mensalidades.mesfim')->where('ano',$_POST['ano'])->first();
+        $def = Def_Mensalidade::query()
+            ->join('mes','def__mensalidades.mescomeco','=','mes.numero')
+            ->select('mes.*','def__mensalidades.mesfim')->where('ano',$_POST['ano'])->first();
         foreach ($mensalidade as $ms){$mesesPagos = $mesesPagos.' '.$ms->mes;}
         $mesNaoP = Mes::query()->select('nome')->whereNotIn('nome',explode(' ',trim(rtrim($mesesPagos))))->where('numero','>=',$def->numero)->where('numero','<=',$def->mesfim)->get();
+
+
+        $mesesPagos2 = '';
+        $meses = PagamntoMensalidade::query()->where('idAluno',$_POST['idAluno'])->where('curso',$_POST['curso'])->where('anoPago',$_POST['ano'])->get();
+        foreach ($meses as $ms2){$mesesPagos2 = $mesesPagos2.' '.$ms2->mes;}
+        $mesesNaoPAgos = Mes::query()->select('nome')->whereNotIn('nome',explode(' ',trim(rtrim($mesesPagos2))))->where('numero','>=',$def->numero)->where('numero','<=',$def->mesfim)->get();
+
         $inscricao = Inscricao::query()
             ->join('alunos','inscricaos.idAluno','=','alunos.id')
             ->join('cursos','inscricaos.idCurso','=','cursos.id')
             ->select('cursos.*','cursos.id as idCurso')
-            ->where('idAluno',$_POST['idAluno'])->where('ano',$_POST['ano'])->get();
-//        $divida = PagamntoMensalidade::query()->where('idAluno',$_POST['idAluno'])
-//            ->where('anoPago',$_POST['ano'])->sum('divida');
-        return  response()->json(array('mensal'=> $mensalidade,'foto'=>$alun->foto,'mesesNao'=>$mesNaoP,'curso'=>$inscricao/*,'divida'=>$divida*/));
+            ->where('idAluno',$_POST['idAluno'])->where('estado','=','inscrito')->where('ano',$_POST['ano'])->get();
+        return  response()->json(array('mensalidade'=> $mensalidade,'mesesNao'=>$mesNaoP,'mesesNaoPagos'=>$mesesNaoPAgos,'inscricao'=>$inscricao/*,'divida'=>$divida*/));
+    }
+
+
+    public function getMeses(){
+
+        $meses = PagamntoMensalidade::query()->where('idAluno',$_POST['idAluno'])->where('curso',$_POST['curso'])->where('anoPago',$_POST['ano'])->get();
+
+        $mesesPagos = '';
+        $def = Def_Mensalidade::query()
+            ->join('mes','def__mensalidades.mescomeco','=','mes.numero')
+            ->select('mes.*','def__mensalidades.mesfim')->where('ano',$_POST['ano'])->first();
+        foreach ($meses as $ms){$mesesPagos = $mesesPagos.' '.$ms->mes;}
+        $mesNaoP = Mes::query()->select('nome')->whereNotIn('nome',explode(' ',trim(rtrim($mesesPagos))))->where('numero','>=',$def->numero)->where('numero','<=',$def->mesfim)->get();
+
+        return  response()->json(array('meses'=>$meses,'mesdAno'=>$mesNaoP));
     }
 
 
 
-
     public function registarMensalidade(){
-        $aluno = Aluno::all();
-        return view('mensalidade.registar',['alu'=>$aluno,'valorMensal'=>$this->valorMensal,'valorTotal'=>$this->valorTotal]);
+        $alunnosInscritos = Inscricao::query()->
+        join('alunos','inscricaos.idAluno','=','alunos.id')->distinct()
+            ->select('alunos.*')->where('estado','=','inscrito')->get();
+
+        return view('mensalidade.registar',['alu'=>$alunnosInscritos]);
     }
 
     public function getDevedoresMes(){
 
         $tabela =$_POST['tabela'];
         $export =$_POST['tipo'];
-//        $idAlunos = PagamntoMensalidade::query()->join('mensalidades','pagamnto_mensalidades.idMensalidade','=','mensalidades.id')->select('idAluno')->where('mes',$_POST['mes'])->get();
-        $idAlunos = PagamntoMensalidade::query()->select('idAluno')->where('mes',$_POST['mes'])->get();
-        $ids='';
-        foreach ($idAlunos as $i){
-            $ids = $i->idAluno.' '.$ids;
+        $idAlunoInscritos = Inscricao::query()->where('estado','<>','pre-inscrito')->distinct()->pluck('idAluno')->toArray();
+        sort($idAlunoInscritos);
+
+        $numNaoPagamento=0;
+        $listaCursos=array(); $listaIdsAlunos = array(); $listaDeTurma = array(); $listaDeValor=array();
+        for ($c =0; $c< sizeof($idAlunoInscritos); $c++){
+            $cursosAlunoo = Inscricao::query()->join('alunos','alunos.id','=','inscricaos.idAluno')->join('cursos','cursos.id','=','inscricaos.idCurso')->where('inscricaos.idAluno','=',$idAlunoInscritos[$c])->pluck('cursos.nome')->toArray();
+
+            for ($k =0; $k< sizeof($cursosAlunoo); $k++){
+                $resultado = PagamntoMensalidade::query()->where('idAluno','=',$idAlunoInscritos[$c])->where('curso','=',$cursosAlunoo[$k])->where('mes','=',$_POST['mes'])->get();
+                if($resultado->isEmpty()){
+                    $numNaoPagamento +=1;
+                    array_push($listaIdsAlunos,$idAlunoInscritos[$c]);
+                    array_push($listaCursos,$cursosAlunoo[$k]);
+
+                    /*Burca a determinada turma do aluno*/
+                    $turma = TurmaAluno::query()->join('turmas','turmas.id','=', 'turma_alunos.idTurma')
+                        ->where('turma_alunos.idAluno','=',$idAlunoInscritos[$c])
+                        ->where('turmas.nomeCurso','=',$cursosAlunoo[$k])->pluck('turmas.nome');
+                    array_push($listaDeTurma,$turma);
+
+                    /*busca o valor de Mensalidade */
+                    $valor = Curso::query()->where('nome','=',$cursosAlunoo[$k])->pluck('valormensal');
+                    array_push($listaDeValor, $valor);
+                }
+            }
         }
-        $arrayIds = explode(' ',trim(rtrim($ids)));
 
         $devedores = Inscricao::query()
             ->join('alunos','alunos.id','=','inscricaos.idAluno')
-            ->join('cursos','cursos.id','=','inscricaos.idCurso')
-            ->join('turmas','turmas.idCurso','=','inscricaos.idCurso')
-            ->select('alunos.nome as nomeAluno','alunos.*','cursos.nome as curso','cursos.valormensal as divida','turmas.nome as turma')
-        ->whereNotIn('inscricaos.idAluno',$arrayIds)->where('inscricaos.ano','=',$_POST['ano'])->get();
+            ->select('alunos.nome as nomeAluno','alunos.*')
+            ->whereIn('inscricaos.idAluno',$listaIdsAlunos)->get();
 
-        $naddevedores = Inscricao::query()
-            ->join('alunos','alunos.id','=','inscricaos.idAluno')
-            ->join('cursos','cursos.id','=','inscricaos.idCurso')
-            ->join('turmas','turmas.idCurso','=','inscricaos.idCurso')
-            ->select('alunos.nome as nomeAluno','alunos.*','cursos.nome as curso','cursos.valormensal as divida','turmas.nome as turma')
-        ->whereIn('inscricaos.idAluno',$arrayIds)->where('inscricaos.ano','=',$_POST['ano'])->get();
+        $naddevedores = PagamntoMensalidade::query()
+            ->join('alunos','alunos.id','=','pagamnto_mensalidades.idAluno')
+            ->join('turmas','turmas.nomeCurso','=','pagamnto_mensalidades.curso')
+            ->select('alunos.nome as nomeAluno','alunos.*','turmas.nome as turma','turmas.nomeCurso as curso','pagamnto_mensalidades.valorTotal as valor','pagamnto_mensalidades.mes','pagamnto_mensalidades.idAluno')
+            ->where('mes',$_POST['mes'])->where('anoPago',$_POST['ano'])->get();
+
 
         if($tabela === 'devedor' && $export === 'naoModal'){
-            return response()->json(array('devedor'=>$devedores));
+            return response()->json(array('devedor'=>$devedores,'cursos'=>$listaCursos,'vezes'=>$numNaoPagamento,'turma'=>$listaDeTurma,'valor'=>$listaDeValor));
         }elseif ($tabela === 'naodevedor' && $export ==='naoModal'){
            return response()->json(array('naodevedor'=>$naddevedores));
         }
 
-
         if($tabela === 'todasTabelas' && $export === 'simModel'){
-            return view('mensalidade.modal',['devedores'=>$devedores,'honestos'=>$naddevedores,'mes'=>$_POST['mes']]);
+            return view('mensalidade.modal',['devedores'=>$devedores,'cursos'=>$listaCursos,'turma'=>$listaDeTurma,'vezes'=>$numNaoPagamento,'valor'=>$listaDeValor,'honestos'=>$naddevedores,'mes'=>$_POST['mes']]);
         }
     }
 
@@ -209,32 +210,48 @@ class MensalidadeController extends Controller{
         return view('mensalidade.modal');
     }
 
+    public function getValorAdiantado(){
+        $adiantado = PagamntoMensalidade::query()->where('idAluno',$_POST['idAluno'])->where('curso',$_POST['curso'])->where('anoPago',$_POST['ano'])->sum('divida');
+        echo $adiantado;
+    }
+
     public function getDividas(){
-//        $divida = PagamntoMensalidade::query()->where('idAluno',$_POST['idAluno'])
-//            ->where('curso',$_POST['curso'])->sum('divida');
 
-
-        $mensalidade = PagamntoMensalidade::query()
-//            ->join('mensalidades','pagamnto_mensalidades.idMensalidade','=','mensalidades.id')
-            ->select('pagamnto_mensalidades.estado as mesEstado','pagamnto_mensalidades.*')
-            ->where('idAluno',$_POST['idAluno'])->where('curso',$_POST['curso'])->where('anoPago',$_POST['ano'])->get();
-
+        $mensalidade = PagamntoMensalidade::query()->select('pagamnto_mensalidades.estado as mesEstado','pagamnto_mensalidades.*')->where('idAluno',$_POST['idAluno'])->where('curso',$_POST['curso'])->where('anoPago',$_POST['ano'])->get();
         $mesesPagos = '';
         $def = Def_Mensalidade::query()->join('mes','def__mensalidades.mescomeco','=','mes.numero')->select('mes.*','def__mensalidades.mesfim')->where('ano',$_POST['ano'])->first();
         foreach ($mensalidade as $ms){$mesesPagos = $mesesPagos.' '.$ms->mes;}
         $mesNaoP = Mes::query()->select('nome')->whereNotIn('nome',explode(' ',trim(rtrim($mesesPagos))))->where('numero','>=',$def->numero)->where('numero','<=',$def->mesfim)->get();
-
-//        $mensalidade = PagamntoMensalidade::query()->where('idAluno',$_POST['idAluno'])->where('curso',$_POST['curso'])->select('idMensalidade')->get();
         return response()->json(array('situacao'=>$mesNaoP,'mensal2'=>$mensalidade));
     }
 
 
+    public function salvarMensalidade(Request $request){
+//        'id','valorTotal','estado','mes','anoPago','idMensalidade','idPagamento','idAluno','curso'
 
+        $pgm = new PagamntoMensalidade();
+        $pgm->create($request->all());
+//        $pgm->valorTotal =$_POST['valorTotal'];
+//        $pgm->estado =$_POST['estado'];
+//        $pgm->mes =$_POST['mes'];
+//        $pgm->anoPago =$_POST['anoPago'];
+//        $pgm->idMensalidade =1;
+//        $pgm->idPagamento =$_POST['idPagamento'];
+//        $pgm->idAluno =$_POST['idAluno'];
+//        $pgm->curso =$_POST['curso'];
+//        $pgm->save();
 
-//    public function update(Request $request){
-//        $this->pessoa = ($this->pessoa->find($request->pessoaId));
-//        $this->pessoa->update($request->all());
-//        return redirect('/');
-//    }
+        echo 'salvo com Sucesso';
+    }
 
+    public function updateMensalidade(){
+        $idAluno = $_POST['idAluno']; $curso =$_POST['curso']; $mes = $_POST['mes']; $ano =$_POST['ano']; $valor= $_POST['valor'];
+        $mensal = PagamntoMensalidade::query()->where('idAluno',$idAluno)->where('mes',$mes)->where('curso',$curso)->where('anoPago',$ano)->pluck('id')->toJson();
+        $id =  substr($mensal,1,-1);
+        $mensal2 = PagamntoMensalidade::query()->find($id);
+        $mensal2->estado = 'pago';
+        $mensal2->valorTotal = $mensal2->valorTotal+$valor;
+        $mensal2->save();
+       echo 'Actualizado com sucesso';
+    }
 }

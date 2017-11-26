@@ -31,6 +31,15 @@ Route::post('exportaDevedores','MensalidadeController@exportaDevedores')->name('
 Route::post('getDividas','MensalidadeController@getDividas')->name('getDividas');
 
 Route::post('pagar','MensalidadeController@pagar')->name('pagar');
+Route::post('getValorAdiantado','MensalidadeController@getValorAdiantado')->name('getValorAdiantado');
+Route::post('getMeses','MensalidadeController@getMeses')->name('getMeses');
 
 /*Aluo*/
-Route::post('getCursosAluno','AlunoController@getCursosAluno')->name('getCursosAluno');
+//Route::post('getCursosAluno','AlunoController@getCursosAluno')->name('getCursosAluno');
+
+
+/*Pagamento*/
+//Route::post('salvarPagamento','PagamentoController@salvarPagamento')->name('salvarPagamento');
+Route::post('/getInscricao','InscricaoController@getInscricao');
+Route::post('/getDadosInscricao','InscricaoController@getDadosInscricao');
+Route::post('/updateMensalidade','MensalidadeController@updateMensalidade');

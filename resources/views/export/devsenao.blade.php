@@ -2,13 +2,21 @@
 <html>
     <head>
         <meta charset=utf-8"/>
+        <style>
+            td{
+                margin: -5px;
+            }
+            table{
+                margin-left: -20px;
+            }
+        </style>
         <link type="text/css" rel="stylesheet" href="css/export.css">
     </head>
 
     <body>
         <h2>Alunos Devedores & Não Devedores</h2>
         <h3>{{$mesAno}}</h3>
-        <table border="2" style="width: 100%" id="tabelaAll">
+        <table border="2" style="width: 104%" id="tabelaAll">
             <thead>
             <tr>
                 <th style="width: 15%"></th>
@@ -21,46 +29,47 @@
             <tbody id="tabeAllCorpo">
             <?php $totalDivida=0.0; $totalPago=0.0 ?>
             <tr>
-                <td style="height: 110px; border: 2px solid #89ccdf; font-size: 20px">Devedores</td>
-                <td style="border: 1px solid #89ccdf">
-                    @foreach($devedores as $dev)
-                        <p class="myP">{{$dev->nomeAluno.' '.$dev->apelido}}</p>
-                    @endforeach
+                <td style="height: 110px; border: 2px solid #89ccdf; font-size: 25px">Devedores</td>
+                <td >
+
+                    @for($d =0 ; $d < $vezes ; $d++)
+                        <p class="myP">{{$devedores[$d]->nomeAluno.' '.$devedores[$d]->apelido}}</p>
+                    @endfor
                 </td>
-                <td style="border: 1px solid #89ccdf">
-                    @foreach($devedores as $dev)
-                        <p class="myP">{{$dev->curso.' - '.$dev->turma}} </p>
-                    @endforeach
+                <td>
+                    @for($d =0 ; $d < $vezes ; $d++)
+                        <p class="myP">{{$cursos[$d].' - '. @substr($turma[$d],2,-2)}} </p>
+                    @endfor
                 </td>
 
-                <td style="border: 1px solid #89ccdf">
-                    @foreach($devedores as $dev)
-                        <?php $totalDivida+=$dev->divida?>
-                        <p class="myP">{{$dev->divida.' Mt'}} </p>
-                    @endforeach
+                <td >
+                    @for($d =0 ; $d < $vezes ; $d++)
+                        <?php $totalDivida+= substr($valor[$d],1,-1)?>
+                        <p class="myP">{{ @number_format(@substr($valor[$d],1,-1),2).' Mt'}} </p>
+                    @endfor
                 </td>
-                <td style="height: 110px; border: 2px solid #89ccdf; font-size: 20px"><?php echo $totalDivida.' Mt'?></td>
+
+                <td style="height: 110px; border: 2px solid #89ccdf; font-size: 25px"><?php echo number_format($totalDivida,2).' Mt'?></td>
             </tr>
-
             <tr>
-                <td style="min-height: 110px; border: 2px solid #89ccdf; font-size: 20px">Não Devedores</td>
-                <td style="border: 1px solid #89ccdf">
+                <td style="height: 110px; border: 2px solid #89ccdf; font-size: 25px">Não Devedores</td>
+                <td >
                     @foreach($honestos as $dev)
                         <p class="myP">{{$dev->nomeAluno.' '.$dev->apelido}}</p>
                     @endforeach
                 </td>
-                <td class="myPDady" style="border: 1px solid #89ccdf">
+                <td class="myPDady" >
                     @foreach($honestos as $dev)
                         <p class="myP">{{$dev->curso.' - '.$dev->turma}} </p>
                     @endforeach
                 </td>
-                <td style="border: 1px solid #89ccdf">
+                <td >
                     @foreach($honestos as $dev)
-                        <?php $totalPago += $dev->divida?>
-                        <p class="myP">{{$dev->divida.' Mt'}} </p>
+                        <?php $totalPago += $dev->valor?>
+                        <p class="myP">{{number_format($dev->valor,2).' Mt'}} </p>
                     @endforeach
                 </td>
-                <td style="height: 110px; border: 1px solid #89ccdf; font-size: 20px"><?php echo $totalPago.' Mt'?></td>
+                <td style="height: 110px;  font-size: 25px"><?php echo number_format($totalPago,2).' Mt'?></td>
             </tr>
             </tbody>
         </table>

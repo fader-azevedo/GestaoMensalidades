@@ -2027,6 +2027,17 @@ a:focus {
   float: right;
   color: #dd4b39;
 }
+.tools2 > button{
+  background-color: #00a7d0;
+  color: white;
+}
+.todo-list > li .tools2 {
+  /*display: none;*/
+  float: right;
+  margin-top: -0.2em;
+  color: rgba(66, 74, 93, 1);
+  font-size: 15px;
+}
 .todo-list > li .tools > .fa,
 .todo-list > li .tools > .glyphicon,
 .todo-list > li .tools > .ion {

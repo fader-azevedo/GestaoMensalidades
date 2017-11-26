@@ -29,11 +29,30 @@
             </span>
         </a>
         <ul class="treeview-menu">
-            <li><a href=""><i class="fa fa-pencil"></i> Registar</a></li>
-            <li><a href=""><i class="fa fa-list"></i> Listar</a></li>
+            <li><a href=""><i class="fa fa-pencil"></i> Registar Alunos</a></li>
+            <li><a href="{{'/aluno'}}"><i class="fa fa-list"></i> Listar Alunos</a></li>
         </ul>
     </li>
+    <li class="treeview">
+        <a>
+            <i class="fa fa-folder"></i>
+            <span>Cursos</span>
+        </a>
+    </li>
 
+    <li class="treeview ">
+        <a>
+            <i class="fa fa-book"></i>
+            <span>Disciplinas</span>
+        </a>
+    </li>
+
+    <li class="treeview">
+        <a>
+            <i class="fa fa-list"></i>
+            <span>Turmas</span>
+        </a>
+    </li>
     <li class="treeview">
         <a href="#">
             <i class="fa fa-bar-chart-o"></i>
@@ -102,22 +121,21 @@
             {{--<label class="custom-file-upload">--}}
                 {{--<input type="file" ><i class="fa fa-folder"></i>--}}
             {{--</label>--}}
-            <div class="box box-widget widget-user">
+            <div class="box box-widget widget-user" >
                 <div class="widget-user-header bg-aqua-active">
                 </div>
-                <div class="widget-user-image">
+                <div class="widget-user-image" id="divFoto">
                     <img id="idFotoAluno" class="img-circle" src="{!! asset('img/user.jpg') !!}" alt="">
+                    <input type="hidden" id="fotoCaminho">
                 </div>
 				
                 <div class="box-footer">
                     {{--input responsavel em armazenar o valor de divida--}}
                     <input type="hidden" id="valorDivida">
                     {{--/*input responsavel por armazenar o valor a pagar de cada mensalidade*/--}}
-                    <input type="hidden" id="valorAPagar">
                     {{--input de vvalor a pagar no momento de pagamento--}}
                     {{--<input type="hidden" id="valorP">--}}
                     {{--input que concebe o nome do curso--}}
-                    <input type="hidden" id="nomeCurso">
 
                     <input type="hidden" id="mesAdiantado">
                 </div>
@@ -125,7 +143,7 @@
         </div>
 		<div  class="col-sm-5 col-md-5 col-lg-5">
 
-            <div class="box box-info">
+            <div class="box box-default">
                 <div class="box-header with-border">
                     <i class="fa fa-calendar" style="color:#00b0ff;"></i>
                     <h3 class="box-title">Cursos e Meses à pagar</h3>
@@ -133,8 +151,8 @@
                 <div class="box-body">
                     <div class="row" style="margin-bottom: 0">
                         <h6 class="pull-right" style="margin-bottom: 5px; font-size: 18px">
-                            <label style="width: 100px" class="label label-default">Valor</label>
-                            <label style="width: 100px" class="label label-warning">Dívida</label>
+                            <label style="width: 100px" class="label label-warning hidden" id="labelAdiantado">Valor Adiantado</label>
+                            <label style="width: 100px" class="label label-default">&nbsp;&nbsp;Valor Mensal</label>
                         </h6>
                     </div>
 
@@ -143,8 +161,8 @@
                             <input type="checkbox" id="demos" checked disabled>
                             <label for="demos"><span class="text">Curso</span></label>
                             <div class="pull-right">
-                                <a class="label label-default">500 Mt</a>
                                 <a class="label label-warning">1000 Mt</a>
+                                <a class="label label-default">500 Mt</a>
                             </div>
                         </li>
                     </ul>
@@ -160,7 +178,7 @@
 		</div>
         <div class="col-sm-4 col-md- col-lg-4">
           
-            <div class="box box-info">
+            <div class="box box-default">
                 <div class="box-header with-border">
                     <i class="fa fa-money" style="color:#00b0ff;"></i>
                     <h3 class="box-title">Pagamento</h3>
@@ -217,16 +235,30 @@
                     </div>
                 </div>
                 <div class="box-footer">
+                    {{--action="{{url('/salvar')}}--}}
                     <form id="form1" method="post">
                         {{csrf_field()}}
-                        <button class="btn btn-danger">Cancelar</button>
+                        <button class="btn btn-danger" type="button">Cancelar</button>
                         <div class="pull-right">
-                            <input type="hidden" id="valorP" name="valor">
-                            <input type="hidden" value="numerico" name="forma">
-                            <input type="hidden" value="12345" name="numrecibo">
+                            <input type="hidden" id="valorP" name="valor" value="5000">
+                            <input type="hidden" value="numerico" name="forma" >
+                            <input type="hidden" value="123245" name="numrecibo">
                             <input type="hidden" value="2017-09-09 00:00:00" name="dataP">
-                            <input id="butSalvar" value="Salvar" type="button" class="btn btn-success">
-                            {{--<button id="butSalvar" type="submit" class="btn btn-success" style="margin-left: 5px">&nbsp;&nbsp;&nbsp;Salvar&nbsp;&nbsp;</button>--}}
+{{--//                            data: {'valorTotal':valorPorMes,'estado':'pago','mes':meses[c], 'anoPago': '2017','idPagamento':10,'idAluno': idAluno, 'curso': curso},--}}
+
+                            {{--Para Mensalidade--}}
+
+                            {{--<input type="hidden" id="valorAPagar">--}}
+                            <input type="hidden" id="valorMensal" name="valorTotal">
+                            <input type="hidden" id="estado" name="estado" value="pago">
+                            <input type="hidden" id="mes" name="mes">
+                            <input type="hidden" id="anoPago" name="anoPago" value="2017">
+                            <input type="hidden" id="idMensalidade" name="idMensalidade" value="1">
+                            <input type="hidden" id="idPagamento" name="idPagamento" value="4">
+                            <input type="hidden" id="idAluno" name="idAluno">
+                            <input type="hidden" id="nomeCurso" name="curso">
+
+                            <input id="butSalvar" value="Salvar" type="submit" class="btn btn-success">
                         </div>
                     </form>
                 </div>
@@ -256,187 +288,106 @@
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
+
+            $.ajaxSetup({
+                headers:{
+                    'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
+                }
+            });
+
             $('.select2').select2();
-            var valorAPagar=0;
+            var valorMensal=0;
+            var valorDivida=0;
             var idAluno=0;
             $('#inPutAluno').on('change',function () {
+                $('#divFoto').addClass('collapsed-box').slideUp();
+
                 var op = $('option[value="'+$(this).val()+'"]');
                 idAluno = op.length ? op.attr('id'):'';
                 if(idAluno === '' ||  $('#inPutAluno').val().length=== 0){
                     return;
                 }
                 var mesess='';
+
                 $.ajax({
                     url: '/api/listarPorAluno',
                     type: 'POST',
-                    data: {'idAluno':idAluno,'ano':2017},
+                    data: {'idAluno':idAluno,'ano':2017,'curso':'n'},
                     success: function (rs) {
-                        var valorMensal = rs.curso[0].valormensal;
-
-                        document.getElementById('idFotoAluno').src = '{{asset('img/upload/')}}'.concat('/' + rs.foto);
+                        document.getElementById('idAluno').value = idAluno;
+//                        alert(rs.mensalidade[0].mesEstado);
+                        {{--document.getElementById('fotoCaminho').value =  '{{asset('img/upload/')}}'.concat('/' + rs.mensalidade[0].foto);--}}
+                        $('.cr').remove();
                         $('.mes').remove();
                         $('#actual').remove();
                         $('.ms').remove();
-                        /*Inicio de raking de pagamento*/
-                        var mesAdiantado ='';
-//                        var valorDivida=0;
 
-                        var valorTodosMeses =0;
-                        var dividasTodosMeses =0;
-                        if(rs.mensal.length > 0) {
-                            for (var i = 0; i < rs.mensal.length; i++) {
-                                if (rs.mensal[i].mesEstado === 'pago') {
-                                    $('#DivMeses').append(' <div class="mes"><label class="label label-success">' + rs.mensal[i].mes + '</label></div>');
-                                    mesess += rs.mensal[i].mes + ' ' + '<i style="color: #33de0c" class="fa fa-check"></i><br/>';
-                                    document.getElementById('mesAdiantado').value='';
-                                } else if (rs.mensal[i].mesEstado === 'adiantado') {
-                                    $('#DivMeses').append(' <div class="mes tooltippy"> <span style="color:#f39c12;" class="tooltippytext">Valor:' + ' ' + rs.mensal[i].valorTotal + ' ' + 'Mt</span> <label class="label label-warning">' + rs.mensal[i].mes + '</label></div>');
-                                    mesAdiantado = rs.mensal[i].mes;
-                                    mesess += rs.mensal[i].mes + ' ' + '<i style="color: #f39c12" class="fa fa-check"></i><br/>';
-                                }
+                        for(var cr =0; cr < rs.inscricao.length; cr++) {
 
-                                /*Cursos e respectiva divida*/
-                                $('.cr').remove();
-                                if (rs.curso.length === 1) {
-                                    /*Quando so frequenta apenas um curso*/
-                                    $('#listCursos').append('<li class="cr"> ' +
-                                        '<input class="radios" id="radio' + rs.curso[0].id + '" type="checkbox" checked disabled> <label for="radio' + rs.curso[0].id + '"><span class="text">' + rs.curso[0].nome + '</span>' +
-                                        '</label> ' +
-                                        '<a id="cursoDivida' + rs.curso[0].id + '" style="font-size: 14px; float: right; width: 100px" class="label label-warning">' + rs.mensal[i].divida + ' Mt</a> ' +
-                                        '<a style="font-size:14px; float:right; width: 100px" class="label label-default">' + rs.curso[0].valormensal.toFixed(2) + ' Mt</a> ' +
-                                        '</li>');
-                                    valorTodosMeses = rs.curso[0].valormensal;
-                                    dividasTodosMeses = rs.mensal[i].divida;
-                                    document.getElementById('nomeCurso').value =  rs.curso[0].nome ;
-                                } else if ((rs.curso.length > 1)) {
-                                    /*Quando faz mais de um curso*/
-                                    if (rs.curso[0].nome === rs.mensal[i].curso) {
+                            var idCurso = rs.inscricao[cr].id;
+                            var nomeCurso0 = rs.inscricao[0].nome;
+                            var nomeCurso = rs.inscricao[cr].nome;
+                            var valorMensal = rs.inscricao[cr].valormensal;
+                            var valorMensal0 = rs.inscricao[0].valormensal;
 
-                                        $('#listCursos').append('<li class="cr"> ' +
-                                            '<input name="ckeque" class="radios" id="radio' + rs.curso[0].id + '" type="checkbox" checked data-title="' + rs.curso[0].nome + '" data-valorMensal="'+rs.curso[0].valormensal.toFixed(2)+'"  data-divida="' + rs.mensal[i].divida.toFixed(2)+'">' +
-                                            '<label for="radio'+rs.curso[0].id+'"><span class="text">' + rs.curso[0].nome + '</span>' +
-                                            '</label>' +
-                                            '<a style="font-size: 14px; float:right; width: 100px" class="label label-warning tk">' + rs.mensal[i].divida.toFixed(2) + ' Mt</a> ' +
-                                            '<a style="font-size: 14px; float:right; width: 100px" class="label label-default">' + rs.curso[0].valormensal.toFixed(2) + ' Mt</a> ' +
-                                            '</li>');
-                                        valorTodosMeses = rs.curso[0].valormensal;
-                                        dividasTodosMeses = rs.mensal[i].divida;
-                                    }
-                                    for (var cr = 1; cr < rs.curso.length; cr++) {
-                                        /*verifica se o curso ja foi pago pelo menos uma vez*/
-                                        if (rs.curso[cr].nome === rs.mensal[i].curso) {
-                                            $('#listCursos').append('<li class="cr"> ' +
-                                                '<input name="ckeque"  class="radios" id="radio' + rs.curso[cr].id+'" type="checkbox" data-title="' + rs.curso[cr].nome + '" data-valorMensal="'+rs.curso[cr].valormensal.toFixed(2)+'" data-divida="' + rs.mensal[i].divida.toFixed(2)+'">' +
-                                                '<label for="radio' + rs.curso[cr].id + '"><span class="text">' + rs.curso[cr].nome + '</span>' + '</label>' +
-                                                '<a style="font-size: 14px; float: right; width: 100px" class="label label-warning">' + rs.mensal[i].divida.toFixed(2) + ' Mt</a> ' +
-                                                ' <a style="font-size: 14px; float: right; width: 100px" class="label label-default">' + rs.curso[cr].valormensal.toFixed(2) + ' Mt</a> ' +
-                                                '</li>');
-                                        } else {
-                                            $('#listCursos').append('<li class="cr"> ' +
-                                                '<input name="ckeque"  class="radios" id="radio' + rs.curso[cr].id + '" type="checkbox" data-title="' + rs.curso[cr].nome + '" data-valorMensal="'+rs.curso[cr].valormensal.toFixed(2)+'" data-divida="0">' +
-                                                ' <label for="radio' + rs.curso[cr].id + '"><span class="text">' + rs.curso[cr].nome + '</span>' + '</label>' +
-                                                '<a style="font-size: 14px; float: right; width: 100px" class="label label-warning"> 0.00 Mt </a> ' +
-                                                '<a style="font-size: 14px; float: right; width: 100px" class="label label-default">' + rs.curso[cr].valormensal.toFixed(2) + ' Mt</a> ' +
-                                                '</li>');
-                                        }
-                                    }
-                                    document.getElementById('nomeCurso').value =  rs.curso[0].nome ;
-                                }
-                            }
-                        }else{
-                            /*caso ainda nao exista registo de pagamento*/
-                            $('.cr').remove();
                             $('#listCursos').append('<li class="cr"> ' +
-                                '<input id="radio' + rs.curso[0].id + '" type="checkbox" checked disabled> <label for="radio' + rs.curso[0].id + '"><span class="text">' + rs.curso[0].nome + '</span>' + '</label>' +
-                                '<a style="font-size: 14px; float: right; width: 100px" class="label label-warning"> 0.00 Mt </a> ' +
-                                '<a style="font-size: 14px; float: right; width: 100px" class="label label-default">' + rs.curso[0].valormensal.toFixed(2) + ' Mt</a> ' +
-                                '</li>');
-                            valorTodosMeses += rs.curso[0].valormensal;
-                        }
-                        /*Fimo do ranking de pagamento de mensalidades*/
+                                '<input name="ckeque" class="radios" id="radio' + idCurso + '" type="checkbox" data-title="'+nomeCurso+'" data-valorMensal="'+valorMensal+'"  > <label for="radio' + idCurso + '"><span class="text">' + nomeCurso + '</span>' + '</label> ' +
+                                '<a style="font-size:14px; float:right; width: 100px" class="label label-default">' + valorMensal.toFixed(2) + ' Mt</a> ' +
+                                '<a id="dev'+idCurso+'" style="font-size:14px; float:right; width: 100px" class="label label-warning"></a> ' +
+                            '</li>');
 
-                        /*Adicona mes adiantado no input dos mes a pagar*/
-                        if(mesAdiantado !== '') {
-                            $('#selectMes').append('<option selected="selected"  class="ms adiantado" value=' + mesAdiantado + '>' + mesAdiantado + '</option>');
-                            document.getElementById('mesAdiantado').value =mesAdiantado;
-                            $('#selectMes').append('<option  selected="selected"  class="ms" value=' + rs.mesesNao[0].nome + '>' + rs.mesesNao[0].nome + '</option>');
-                        }else{
-                            document.getElementById('mesAdiantado').value =rs.mesesNao[0].nome;
-                            $('#selectMes').append('<option  selected="selected"  class="ms adiantado" value=' + rs.mesesNao[0].nome + '>' + rs.mesesNao[0].nome + '</option>');
-                        }
-                        document.getElementById('txtValorAPagar').innerHTML = (valorTodosMeses+dividasTodosMeses).toFixed(2) +' '+'Mt';
-                        document.getElementById('valorAPagar').value = (valorTodosMeses).toFixed(2);
-                        document.getElementById('valorDivida').value = (dividasTodosMeses).toFixed(2);
-                        document.getElementById('valorP').value = (valorTodosMeses+dividasTodosMeses);
+                            document.getElementById('nomeCurso').value=nomeCurso;
+                            for (var men = 0; men < rs.mensalidade.length; men++) {
+                                /*Quandod fez adiantados*/
+                                                        alert(rs.mensalidade[men].mesEstado);
 
-                        /*adiciona os restantes meses a pagar*/
-                        $('#DivMeses').append('<div id="actual" class="tooltippy">' + '<p style="color:#3a5fff" class="centered"><i  class="fa fa-check fa-2x"></i></p><span class="tooltippytext">'+mesess+'</span> </div>');
-                        $('#DivMeses').append('<div class="mes"><label class="label label-danger">'+rs.mesesNao[0].nome+'</label></div>');
-                        for(var m=1; m < rs.mesesNao.length; m++){
-                            $('#DivMeses').append(' <div class="mes"><label class="label label-danger">'+rs.mesesNao[m].nome+'</label></div>');
-//                            $('#selectMes').append('<option  class="ms" value='+rs.mesesNao[m].nome+'>'+rs.mesesNao[m].nome+'</option>');
+                                if (valorMensal !== rs.mensalidade[men].valorTotal && (nomeCurso === rs.mensalidade[men].curso)) {
+                                    valorDivida = valorMensal - rs.mensalidade[men].valorTotal;
+                                    document.getElementById('radio' + idCurso+'').setAttribute('data-valorAdiantado',rs.mensalidade[men].valorTotal);
+                                    document.getElementById('dev' + idCurso+'').innerHTML = parseFloat(rs.mensalidade[men].valorTotal).toFixed(2)+' Mt';
+                                    document.getElementById('valorDivida').value=valorDivida;
+                                }else {
+                                    document.getElementById('valorDivida').value=0;
+                                }
+                                document.getElementById('txtValorAPagar').innerHTML = (valorMensal).toFixed(2) + ' ' + 'Mt';
+                                document.getElementById('valorMensal').value = valorMensal;
+                                document.getElementById('valorP').value = (valorMensal);
+                            }
                         }
-                        $('#selectMes').append('<option  class="ms" value='+rs.mesesNao[1].nome+'>'+rs.mesesNao[1].nome+'</option>');
+                        var grpx = 'input:checkbox[ data-title="'+nomeCurso+'"]';
+                        $(grpx).prop("checked",true);
 
+                        /*raking*/
+
+                        getDivida(idAluno,nomeCurso,2017);
 
                         $('.radios').click(function () {
 
-                            var valorMC = parseFloat($(this).attr('data-valorMensal'));//valor Mensal do curso
-                            var valorDiv = parseFloat($(this).attr('data-divida'));//valor de divida de mes
+                            var valorMensal = parseFloat($(this).attr('data-valorMensal'));//valor Mensal do curso
+                            var valorAdiantando = parseFloat($(this).attr('data-valorAdiantado'));//valor de adiantado do mes
+                            if(valorAdiantando >0){
+                                document.getElementById('valorDivida').value=valorMensal-valorAdiantando;
+                                document.getElementById('txtValorAPagar').innerHTML = (valorMensal-valorAdiantando).toFixed(2)+ ' ' + 'Mt';
+                                document.getElementById('valorP').value = (valorMensal-valorAdiantando);
+                            }else{
+                                document.getElementById('valorDivida').value=0;
+                                document.getElementById('txtValorAPagar').innerHTML = (valorMensal).toFixed(2)+ ' ' + 'Mt';
+                                document.getElementById('valorP').value = (valorMensal);
+                            }
+                            document.getElementById('valorMensal').value = valorMensal;
+
                             var curs = $(this).attr('data-title');//nome do curso
                             var box =$(this);
+                            document.getElementById('nomeCurso').value=curs;
                             if(box.is(':checked')){
                                 var grp = "input:checkbox[name='"+box.attr("name")+"']";
                                 $(grp).prop("checked",false);
                                 box.prop('checked',true);
                                 document.getElementById('nomeCurso').value = curs;
-                                $.ajax({
-                                    url: '/api/getDividas',
-                                    type: 'POST',
-                                    data: {'idAluno': idAluno, 'curso': curs, 'ano': '2017'},
-                                    success: function (rs2) {
-                                        document.getElementById('txtValorAPagar').innerHTML = (valorMC+valorDiv).toFixed(2)+ ' ' + 'Mt';
-                                        document.getElementById('valorAPagar').value =valorMC;
-                                        document.getElementById('valorDivida').value=valorDiv;
-
-                                        $('.mes').remove();
-                                        $('#actual').remove();
-                                        $('.ms').remove();
-//                                        $('.adiantado').remove();
-                                        mesAdiantado ='';
-                                        var meses2 = '';
-                                        for (var b = 0; b < rs2.mensal2.length; b++) {
-                                            if (rs2.mensal2[b].mesEstado === 'pago') {
-                                                $('#DivMeses').append(' <div class="mes"><label class="label label-success">' + rs2.mensal2[b].mes + '</label></div>');
-                                                meses2 += rs2.mensal2[b].mes + ' ' + '<i style="color: #33de0c" class="fa fa-check"></i><br/>';
-//                                                document.getElementById('mesAdiantado').value='';
-                                                document.getElementById('mesAdiantado').value =rs2.mensal2[b].mes;
-                                            } else if (rs2.mensal2[b].mesEstado === 'adiantado') {
-                                                $('#DivMeses').append(' <div class="mes tooltippy"> <span style="color:#f39c12;" class="tooltippytext">Valor:' + ' ' + rs2.mensal2[b].valorTotal + ' ' + 'Mt</span> <label class="label label-warning">' + rs2.mensal2[b].mes + '</label></div>');
-                                                meses2 += rs2.mensal2[b].mes + ' ' + '<i style="color: #f39c12" class="fa fa-check"></i><br/>';
-                                                mesAdiantado = rs2.mensal2[b].mes;
-                                                document.getElementById('mesAdiantado').value =rs2.mensal2[b].mes;
-                                            }
-                                        }
-                                        if(mesAdiantado !== '') {
-                                            $('#selectMes').append('<option  selected="selected"  class="ms adiantado" value=' + mesAdiantado + '>' + mesAdiantado + '</option>');
-                                            document.getElementById('mesAdiantado').value =mesAdiantado;
-//                                            alert(mesAdiantado);
-                                            $('#selectMes').append('<option  selected="selected"  class="ms" value=' + rs2.situacao[0].nome + '>' + rs2.situacao[0].nome + '</option>');
-                                        }else {
-                                            document.getElementById('mesAdiantado').value =rs2.situacao[0].nome;
-                                            $('#selectMes').append('<option  selected="selected"  class="ms adiantado" value=' + rs2.situacao[0].nome + '>' + rs2.situacao[0].nome + '</option>');
-                                        }
-
-                                        $('#DivMeses').append('<div id="actual" class="tooltippy">' + '<p style="color:#3a5fff" class="centered"><i  class="fa fa-check fa-2x"></i></p><span class="tooltippytext">' + meses2 + '</span> </div>');
-                                        $('#DivMeses').append(' <div class="mes"><label class="label label-danger">' + rs2.situacao[0].nome + '</label></div>');
-                                        for (var m = 1; m < rs2.situacao.length; m++) {
-                                            $('#DivMeses').append(' <div class="mes"><label class="label label-danger">' + rs2.situacao[m].nome + '</label></div>');
-                                            $('#selectMes').append('<option  class="ms" value='+rs2.situacao[m].nome+'>'+rs2.situacao[m].nome+'</option>');
-                                        }
-//                                        document.getElementById('mesAdiantado').value =rs2.situacao[0].nome;
-                                    }
-                                });
+                                $('.mes').remove();
+                                $('#actual').remove();
+                                $('.ms').remove();
+                                getDivida(idAluno,curs,2017);
                             }else{
                                 box.prop('checked',true);
                             }
@@ -444,12 +395,55 @@
                     }
                 });
             });
-            
+
+            function getDivida(idAluno, curso, ano) {
+                $.ajax({
+                    url: '/api/getMeses',
+                    type: 'POST',
+                    data: {'idAluno': idAluno, 'curso': curso, 'ano': ano},
+                    success: function (dados) {
+                        var mesess = ''; var control=0;
+                        for (var m = 0; m < dados.meses.length; m++) {
+                            alert(dados.meses[m].mes);
+                            /*Quando nao fez adiantamento*/
+                            if (dados.meses[m].estado === 'pago') {
+                                $('#DivMeses').append(' <div class="mes"><label class="label label-success">' + dados.meses[m].mes + '</label></div>');
+                                mesess += dados.meses[m].mes + ' ' + '<i style="color: #33de0c" class="fa fa-check"></i><br/>';
+                                $('.label-warning').addClass('hidden');
+                            } else {
+                                /*quando fez adiantamento*/
+                                control =1;
+                                $('.label-warning').removeClass('hidden');
+                                document.getElementById('mesAdiantado').value = dados.meses[m].mes;
+                                $('#selectMes').append('<option  selected="selected"  class="ms adiantado" value=' + dados.meses[m].mes + '>' + dados.meses[m].mes + '</option>');
+                                $('#DivMeses').append(' <div class="mes"><label class="label label-warning">' + dados.meses[m].mes + '</label></div>');
+                            }
+                        }
+                        if(control ===0) {
+                            document.getElementById('mesAdiantado').value =  dados.mesdAno[0].nome;
+                            $('#selectMes').append('<option  selected="selected"  class="ms adiantado" value=' + dados.mesdAno[0].nome + '>' + dados.mesdAno[0].nome + '</option>');
+                        }else{
+                            $('#selectMes').append('<option   class="ms" value=' + dados.mesdAno[0].nome + '>' + dados.mesdAno[0].nome + '</option>');
+                        }
+                        $('#DivMeses').append('<div id="actual" class="tooltippy">' + '<p style="color:#3a5fff" class="centered"><i  class="fa fa-check fa-2x"></i></p><span class="tooltippytext">' + mesess + '</span> </div>');
+                        for (var m2 = 0; m2 < dados.mesdAno.length; m2++) {
+                            $('#DivMeses').append(' <div class="mes"><label class="label label-danger">' + dados.mesdAno[m2].nome + '</label></div>');
+                            if((m2+1)<dados.mesdAno.length) {
+                                $('#selectMes').append('<option  class="ms" value=' + dados.mesdAno[m2+1].nome + '>' + dados.mesdAno[m2 + 1].nome + '</option>');
+                            }
+                        }
+                        $('#DivMeses').addClass('hidden').slideUp();
+                        $('#DivMeses').removeClass('hidden').slideDown();
+                        document.getElementById('idFotoAluno').src = document.getElementById('fotoCaminho').value;
+                        $('#divFoto').removeClass('collapsed-box').slideDown();
+                        document.getElementById('mes').value=  dados.mesdAno[0].nome;
+                    }
+                });
+            }
+
             $('#selectMes').change(function () {
                 var mesAdiantado = document.getElementById('mesAdiantado').value;
-
-
-                var valorAPay = parseFloat(document.getElementById('valorAPagar').value);
+                var valorAPay = parseFloat(document.getElementById('valorMensal').value);
                 var numMes = $('#selectMes option:selected').length;
                 var valrDivida = parseFloat(document.getElementById('valorDivida').value);
                 $('.adiantado').remove();
@@ -494,57 +488,127 @@
                 }
             });
 
-            $('#butSalvar').click(function () {
-//                alert('olasd');
+            function actulizarInerface() {
+                $('.mes').remove();
+                $('#actual').remove();
+                $('.ms').remove();
+                getDivida(idAluno,curso,2017);
+            }
+            $('#form1').submit(function (exx) {
+                exx.preventDefault();
+
+                var valorMensal = parseFloat(document.getElementById('valorMensal').value);
+                var meses = $('#selectMes').val();
+                var valorAPagar = parseFloat(document.getElementById('valorP').value);
+                var valorDivida = parseFloat(document.getElementById('valorDivida').value);
+                var curso = document.getElementById('nomeCurso').value;
+                var tipoPay = document.querySelector('input[name="tipoPay"]:checked').value;
+                var formaPay = document.querySelector('input[name="formaPay"]:checked').value;
+////                alert('Meses: '+meses+'  Taku:'+valorAPagar+'  Divida:'+valrDivida+'  idAluo:'+idAluno+' curso:'+curso+'  tipo:'+tipoPay+'  forma:'+formaPay);
+
+                if(tipoPay === 'Normal'){
+                    var vp = $("input#valorPayy").val();
+                    if(vp.length < 1 ){
+                        $("input#valorPayy").css({"border": "1px solid #EE6464"});
+                        return false;
+                    }
+
+                    $("input#valorPayy").keyup(function(){
+                        if($(this).length > 0){
+                            $(this).css({"border": "1px solid #F5F5F5"});
+                        }
+                    });
+                }
+
                 $.ajax({
-                    url: '/api/pagar',
+                    url: '/salvarPagamento',
                     type: 'POST',
-//                    data: {'valor': valorAPagar, 'dataP': '2017-12-30 00:00:00'},
                     data: new FormData(this),
                     processData: false,
                     contentType: false,
-                    cache:false
-                }).done(function (e) {
-                    alert(e.dado);
-                }).fail(function () {
-                    alert('Erro No Metodo do Ajax ...');
+                    cache: false,
+                    success: function (idPagamento) {
+                        document.getElementById('idPagamento').value = idPagamento;
+                        if(valorDivida !== 0){
+                            valorAPagar = valorAPagar-valorDivida;
+                            $.ajax({
+                                url: '/api/updateMensalidade',
+                                type: 'POST',
+                                data: {'idAluno': idAluno,'mes':meses[0], 'curso': curso, 'ano': '2017','valor':valorDivida},
+                                success: function (rs) {
+//                                    alert(rs);
+                                    actulizarInerface();
+                                }
+                            });
+                        }
+                    }
                 });
-            })
 
 
-//            $('#butSalvar').click(function () {
-//                var meses = $('#selectMes').val();
-//                var valorAPagar = parseFloat(document.getElementById('valorP').value);
-//                var valorDivida = parseFloat(document.getElementById('valorDivida').value);
-//                var curso = document.getElementById('nomeCurso').value;
-//                var tipoPay = document.querySelector('input[name="tipoPay"]:checked').value;
-//                var formaPay = document.querySelector('input[name="formaPay"]:checked').value;
-////                alert('Meses: '+meses+'  Taku:'+valorAPagar+'  Divida:'+valrDivida+'  idAluo:'+idAluno+' curso:'+curso+'  tipo:'+tipoPay+'  forma:'+formaPay);
-
-                /*salvar apenas pagamento*/
-
-
-
-//                for(var c=0; c< meses.length; c++){
-//
-//                    if(valorDivida !== 0){
-//                        /*Para fechar(actualizar) o valor que alun esta a dever*/
-//                        alert('Adciona '+valorDivida+' No '+meses[0]);
-//                        valorAPagar = valorAPagar-valorDivida;
-//                        valorDivida =0;
-////                        $.ajax({
-////                            url: '/api/getDividas',
-////                            type: 'POST',
-////                            data: {'idAluno': idAluno, 'curso': curs, 'ano': '2017'},
-////                            success: function (rs) {
-////                            }
-////                        });
-//                    }else{
-//                        alert('salva'+ meses[c]+' com:'+valorAPagar);
-//                    }
-//                }
-//                $('#formulario')[0].reset();
-//            })
-        })
+                if(valorDivida !== 0) {
+                    for (var c = 1; c < meses.length; c++) {
+                        document.getElementById('mes').value= meses[c];
+                        $.ajax({
+                            url: '/salvarMensalidade',
+                            type: 'POST',
+                            data: new FormData(this),
+                            processData: false,
+                            contentType: false,
+                            cache: false,
+                            success: function (rs) {
+//                                alert(rs);
+                            }
+                        });
+                    }
+                    actulizarInerface();
+                }else {
+                    for (var x = 0; x < meses.length; x++) {
+                        document.getElementById('mes').value = meses[x];
+//                        alert('salva '+meses[x]);
+                        $.ajax({
+                            url: '/salvarMensalidade',
+                            type: 'POST',
+                            data: new FormData(this),
+                            processData: false,
+                            contentType: false,
+                            cache: false,
+                            success: function (rs) {
+                                alert(rs);
+                            }
+                        });
+                    }
+                    actulizarInerface();
+                }
+            });
+        });
     </script>
 @endsection
+
+
+
+{{--for(var c=0; c< meses.length; c++){--}}
+{{--document.getElementById('mes').value= meses[c];--}}
+{{--if(valorDivida !== 0){--}}
+{{--valorAPagar = valorAPagar-valorDivida;--}}
+{{--$.ajax({--}}
+{{--url: '/api/updateMensalidade',--}}
+{{--type: 'POST',--}}
+{{--data: {'idAluno': idAluno,'mes':meses[0], 'curso': curso, 'ano': '2017','valor':valorDivida},--}}
+{{--success: function (rs) {--}}
+{{--alert(rs);--}}
+{{--}--}}
+{{--});--}}
+{{--valorDivida =0;--}}
+{{--}else{--}}
+{{--$.ajax({--}}
+{{--url: '/salvarMensalidade',--}}
+{{--type: 'POST',--}}
+{{--data: new FormData(this),--}}
+{{--processData: false,--}}
+{{--contentType: false,--}}
+{{--cache: false,--}}
+{{--success: function (rs) {--}}
+{{--alert(rs);--}}
+{{--}--}}
+{{--});--}}
+{{--}--}}

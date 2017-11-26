@@ -29,9 +29,30 @@
             </span>
         </a>
         <ul class="treeview-menu">
-            <li><a href=""><i class="fa fa-pencil"></i> Registar</a></li>
-            <li><a href=""><i class="fa fa-list"></i> Listar</a></li>
+            <li><a href=""><i class="fa fa-pencil"></i> Registar Aluno</a></li>
+            <li><a href="{{'/aluno'}}"><i class="fa fa-list"></i> Listar Alunos</a></li>
         </ul>
+    </li>
+
+    <li class="treeview">
+        <a>
+            <i class="fa fa-folder"></i>
+            <span>Cursos</span>
+        </a>
+    </li>
+
+    <li class="treeview ">
+        <a>
+            <i class="fa fa-book"></i>
+            <span>Disciplinas</span>
+        </a>
+    </li>
+
+    <li class="treeview">
+        <a>
+            <i class="fa fa-list"></i>
+            <span>Turmas</span>
+        </a>
     </li>
 
     <li class="treeview">
@@ -120,7 +141,7 @@
                                         <tr>
                                             <td class="">{{$ms->mes}}</td>
                                             <td><a data-mes="{{$ms->mes}}" class="btn btn-info btn-nao-devedor"><i class="fa fa-check"></i>&nbsp;{{\App\PagamntoMensalidade::query()->where('mes',$ms->mes)->count()}}</a></td>
-                                            <td><a data-mes="{{$ms->mes}}" class="btn btn-danger btn-devedor"><i class="zmdi zmdi-close"></i>&nbsp;{{\App\Aluno::all()->count()-\App\PagamntoMensalidade::query()->where('mes',$ms->mes)->count()}}</a></td>
+                                            <td><a data-mes="{{$ms->mes}}" class="btn btn-danger btn-devedor"><i class="zmdi zmdi-close"></i>&nbsp;{{\App\Inscricao::query()->where('estado','=','inscrito')->count()-\App\PagamntoMensalidade::query()->where('mes',$ms->mes)->count()}}</a></td>
                                             <td><a data-mes="{{$ms->mes}}" class="btn btn-primary btn-detalhes" data-code="1"><i class="zmdi zmdi-library"></i>&nbsp;Mais detalhes </a></td>
                                         </tr>
                                     @endforeach
@@ -129,7 +150,7 @@
                                         <tr>
                                             <td>{{$ot}}</td>
                                             <td><a disabled="disabled" class="btn btn-default"><i class="fa fa-check"></i>&nbsp;0</a></td>
-                                            <td><a disabled="disabled" class="btn btn-default"><i class="zmdi zmdi-close"></i>&nbsp;0&nbsp;</a></td>
+                                            <td><a disabled="disabled" class="btn btn-default"><i class="zmdi zmdi-close"></i>&nbsp;{{\App\Inscricao::query()->where('estado','=','inscrito')->count()}}</a></td>
                                             <td><a disabled="disabled" class="btn btn-default"><i class="zmdi zmdi-library"></i>&nbsp;&nbsp;Sem registo&nbsp;&nbsp;</a></td>
                                         </tr>
                                     @endforeach
@@ -167,8 +188,9 @@
                                             </tr>
                                             <tr>
                                                 <th style="width: 40%">Nome</th>
-                                                <th style="width: 30%">Turma</th>
-                                                <th style="width: 30%">Curso</th>
+                                                <th style="width: 20%">Turma</th>
+                                                <th style="width: 20%">Curso</th>
+                                                <th style="width: 20%">Valor</th>
                                             </tr>
                                         </thead>
                                         <tbody id="tabelaCorpoNaoDevedor">
@@ -261,8 +283,9 @@
                         document.getElementById('tiluloMesDivida').innerHTML = mes;
                         document.getElementById('MesAnoDivida').innerHTML = 'Alunos Devedores'+' '+mes+'-'+ano;
                         $('MesAnoDivida').slideDown();
-                        for(var k =0; k < rs.devedor.length; k++){
-                            $('<tr class="rm"><td>'+rs.devedor[k].nomeAluno+' '+ rs.devedor[k].apelido+'</td><td>'+rs.devedor[k].turma+'</td><td>'+rs.devedor[k].curso+'</td><td>'+(rs.devedor[k].divida).toFixed(2)+' Mt'+'</td></tr>').hide().appendTo('#tabelaCorpoDevedores').fadeIn(1000);
+
+                        for (var k = 0; k < rs.vezes; k++) {
+                            $('<tr class="rm"><td>'+rs.devedor[k].nomeAluno+' '+ rs.devedor[k].apelido+'</td><td>'+rs.turma[k]+'</td><td>'+rs.cursos[k]+'</td><td>'+parseFloat(rs.valor[k]).toFixed(2)+' Mt'+'</td></tr>').hide().appendTo('#tabelaCorpoDevedores').fadeIn(1000);
                         }
                     }
                 })
@@ -288,7 +311,7 @@
                         document.getElementById('MesAnoNaoDivida').innerHTML = 'Alunos Nao Devedores'+' '+mes+'-'+ano;
                         $('MesAnoNaoDivida').slideDown();
                         for(var k =0; k < rs.naodevedor.length; k++){
-                            $('<tr class="rm2"><td>'+rs.naodevedor[k].nomeAluno+' '+ rs.naodevedor[k].apelido+'</td><td>'+rs.naodevedor[k].turma+'</td><td>'+rs.naodevedor[k].curso+'</td></tr>').hide().appendTo('#tabelaCorpoNaoDevedor').fadeIn(1000);
+                            $('<tr class="rm2"><td>'+rs.naodevedor[k].nomeAluno+' '+ rs.naodevedor[k].apelido+'</td><td>'+rs.naodevedor[k].turma+'</td><td>'+rs.naodevedor[k].curso+'</td><td>'+rs.naodevedor[k].valor+' Mt</td></tr>').hide().appendTo('#tabelaCorpoNaoDevedor').fadeIn(1000);
                         }
                     }
                 })
