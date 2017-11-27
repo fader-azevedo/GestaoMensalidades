@@ -333,12 +333,17 @@
                                     document.getElementById('radio' + idCurso+'').setAttribute('data-valorAdiantado',rs.mensalidade[men].valorTotal);
                                     document.getElementById('dev' + idCurso+'').innerHTML = parseFloat(rs.mensalidade[men].valorTotal).toFixed(2)+' Mt';
                                     document.getElementById('valorDivida').value=valorDivida;
+                                    document.getElementById('txtValorAPagar').innerHTML = (valorMensal - rs.mensalidade[men].valorTotal).toFixed(2) + ' ' + 'Mt';
+
                                 }else {
                                     document.getElementById('valorDivida').value=0;
+                                    document.getElementById('txtValorAPagar').innerHTML = (valorMensal).toFixed(2) + ' ' + 'Mt';
+
                                 }
-                                document.getElementById('txtValorAPagar').innerHTML = (valorMensal).toFixed(2) + ' ' + 'Mt';
+//                                document.getElementById('txtValorAPagar').innerHTML = (valorMensal).toFixed(2) + ' ' + 'Mt';
                                 document.getElementById('valorMensal').value = valorMensal;
                                 document.getElementById('valorP').value = (valorMensal);
+
                             }
                         }
                         var grpx = 'input:checkbox[ data-title="'+nomeCurso+'"]';
@@ -493,22 +498,31 @@
                 var formaPay = document.querySelector('input[name="formaPay"]:checked').value;
 ////                alert('Meses: '+meses+'  Taku:'+valorAPagar+'  Divida:'+valrDivida+'  idAluo:'+idAluno+' curso:'+curso+'  tipo:'+tipoPay+'  forma:'+formaPay);
 
-                if(tipoPay === 'Normal'){
-                    var vp = $("input#valorPayy").val();
-                    if(vp.length < 1 ){
-                        $("input#valorPayy").css({"border": "1px solid #EE6464"});
-                        return false;
-                    }
-
-                    $("input#valorPayy").keyup(function(){
-                        if($(this).length > 0){
-                            $(this).css({"border": "1px solid #F5F5F5"});
-                        }
-                    });
-                }
+//                if(tipoPay === 'Normal'){
+//                    var vp = $("input#valorPayy").val();
+//                    if(vp.length < 1 ){
+//                        $("input#valorPayy").css({"border": "1px solid #EE6464"});
+//                        return false;
+//                    }
+//
+//                    $("input#valorPayy").keyup(function(){
+//                        if($(this).length > 0){
+//                            $(this).css({"border": "1px solid #F5F5F5"});
+//                        }
+//                    });
+//                }
 
 
                 if(valorDivida !== 0) {
+
+                    $.ajax({
+                        url: '/api/updateMensalidade',
+                        type: 'POST',
+                        data: {'idAluno': idAluno,'mes':meses[0], 'curso': curso, 'ano': '2017','valor':valorDivida},
+                        success: function (rs) {
+                        }
+                    });
+
                     for (var c = 1; c < meses.length; c++) {
                         document.getElementById('mes').value= meses[c];
                         $.ajax({
@@ -519,7 +533,6 @@
                             contentType: false,
                             cache: false,
                             success: function (rs) {
-//                                alert(rs);
                             }
                         });
                     }
