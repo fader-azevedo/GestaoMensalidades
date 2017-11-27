@@ -68,11 +68,10 @@
                 var h=today.getHours();
                 var m=today.getMinutes();
                 var s=today.getSeconds();
-                var mm = today.getMilliseconds();
                 // add a zero in front of numbers<10
                 m=checkTime(m);
                 s=checkTime(s);
-                document.getElementById('showtime').innerHTML=h+":"+m+":"+s+'='+mm;
+                document.getElementById('showtime').innerHTML=h+":"+m+":"+s;
                 t=setTimeout(function(){getTime()},500);
             }
 

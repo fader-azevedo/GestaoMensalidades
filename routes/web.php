@@ -35,7 +35,8 @@ Route::group(['prefix'=>'aluno'], function (){
 });
 
 Route::group(['prefix'=>'extras'], function (){
-    Route::get('/','HomeController@lock');
+    Route::get('lock','HomeController@lock');
+    Route::get('logon','HomeController@logon');
 });
 
 Route::get('exportDevedoresPDF',function (){

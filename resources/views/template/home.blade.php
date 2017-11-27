@@ -92,7 +92,7 @@
             </span>
         </a>
         <ul class="treeview-menu">
-            <li><a href=""><i class="fa fa-lock"></i> Bloquear Tela</a></li>
+            <li><a href="{{'/extras/lock'}}"><i class="fa fa-lock"></i> Bloquear Tela</a></li>
             <li><a href=""><i class="fa fa-list"></i> Listar</a></li>
         </ul>
     </li>
