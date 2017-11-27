@@ -19,3 +19,7 @@ class TrigerMensalidade extends Migration{
         DB::unprepared('DROP TRIGGER `trg_Mensalidade`');
     }
 }
+
+
+
+
