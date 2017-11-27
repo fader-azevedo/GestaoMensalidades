@@ -302,7 +302,6 @@
                     data: {'idAluno':idAluno,'ano':2017,'curso':'n'},
                     success: function (rs) {
                         document.getElementById('idAluno').value = idAluno;
-//                        alert(rs.mensalidade[0].mesEstado);
                         document.getElementById('fotoCaminho').value =  '{{asset('img/upload/')}}'.concat('/' + rs.inscricao[0].picture);
                         $('.cr').remove();
                         $('.mes').remove();
@@ -312,10 +311,8 @@
                         for(var cr =0; cr < rs.inscricao.length; cr++) {
 
                             var idCurso = rs.inscricao[cr].id;
-                            var nomeCurso0 = rs.inscricao[0].nome;
                             var nomeCurso = rs.inscricao[cr].nome;
                             var valorMensal = rs.inscricao[cr].valormensal;
-                            var valorMensal0 = rs.inscricao[0].valormensal;
 
                             $('#listCursos').append('<li class="cr"> ' +
                                 '<input name="ckeque" class="radios" id="radio' + idCurso + '" type="checkbox" data-title="'+nomeCurso+'" data-valorMensal="'+valorMensal+'"  > <label for="radio' + idCurso + '"><span class="text">' + nomeCurso + '</span>' + '</label> ' +
@@ -512,9 +509,7 @@
 //                    });
 //                }
 
-
                 if(valorDivida !== 0) {
-
                     $.ajax({
                         url: '/api/updateMensalidade',
                         type: 'POST',

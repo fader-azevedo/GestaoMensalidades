@@ -78,15 +78,9 @@ class MensalidadeController extends Controller{
     }
 
     public function listarPorAluno(){
-        $mensalidade = PagamntoMensalidade::query()->
-        join('alunos','pagamnto_mensalidades.idAluno','=','alunos.id')->select('pagamnto_mensalidades.estado as mesEstado','alunos.*','pagamnto_mensalidades.*')
-//            ->where('idAluno',$_POST['idAluno'])->where('curso',$_POST['curso'])->where('anoPago',$_POST['ano'])->get();
-            ->where('idAluno',$_POST['idAluno'])->where('anoPago',$_POST['ano'])->get();
+        $mensalidade = PagamntoMensalidade::query()->join('alunos','pagamnto_mensalidades.idAluno','=','alunos.id')->select('pagamnto_mensalidades.estado as mesEstado','alunos.*','pagamnto_mensalidades.*')->where('idAluno',$_POST['idAluno'])->where('anoPago',$_POST['ano'])->get();
 
-
-        $mensalidade2 = PagamntoMensalidade::query()->
-        join('alunos','pagamnto_mensalidades.idAluno','=','alunos.id')->select('pagamnto_mensalidades.estado as mesEstado','alunos.*','pagamnto_mensalidades.*')
-            ->where('idAluno',$_POST['idAluno'])->where('curso',$_POST['curso'])->where('anoPago',$_POST['ano'])->get();
+        $mensalidade2 = PagamntoMensalidade::query()->join('alunos','pagamnto_mensalidades.idAluno','=','alunos.id')->select('pagamnto_mensalidades.estado as mesEstado','alunos.*','pagamnto_mensalidades.*')->where('idAluno',$_POST['idAluno'])->where('curso',$_POST['curso'])->where('anoPago',$_POST['ano'])->get();
 
         /*Para registo de mensalidade*/
         $mesesPagos = '';
@@ -96,17 +90,10 @@ class MensalidadeController extends Controller{
         foreach ($mensalidade as $ms){$mesesPagos = $mesesPagos.' '.$ms->mes;}
         $mesNaoP = Mes::query()->select('nome')->whereNotIn('nome',explode(' ',trim(rtrim($mesesPagos))))->where('numero','>=',$def->numero)->where('numero','<=',$def->mesfim)->get();
 
+        $mesesPagos2 = '';$meses = PagamntoMensalidade::query()->where('idAluno',$_POST['idAluno'])->where('curso',$_POST['curso'])->where('anoPago',$_POST['ano'])->get();
+        foreach ($meses as $ms2){$mesesPagos2 = $mesesPagos2.' '.$ms2->mes;}$mesesNaoPAgos = Mes::query()->select('nome')->whereNotIn('nome',explode(' ',trim(rtrim($mesesPagos2))))->where('numero','>=',$def->numero)->where('numero','<=',$def->mesfim)->get();
 
-        $mesesPagos2 = '';
-        $meses = PagamntoMensalidade::query()->where('idAluno',$_POST['idAluno'])->where('curso',$_POST['curso'])->where('anoPago',$_POST['ano'])->get();
-        foreach ($meses as $ms2){$mesesPagos2 = $mesesPagos2.' '.$ms2->mes;}
-        $mesesNaoPAgos = Mes::query()->select('nome')->whereNotIn('nome',explode(' ',trim(rtrim($mesesPagos2))))->where('numero','>=',$def->numero)->where('numero','<=',$def->mesfim)->get();
-
-        $inscricao = Inscricao::query()
-            ->join('alunos','inscricaos.idAluno','=','alunos.id')
-            ->join('cursos','inscricaos.idCurso','=','cursos.id')
-            ->select('cursos.*','cursos.id as idCurso','alunos.foto as picture')
-            ->where('idAluno',$_POST['idAluno'])->where('estado','=','inscrito')->where('ano',$_POST['ano'])->get();
+        $inscricao = Inscricao::query()->join('alunos','inscricaos.idAluno','=','alunos.id')->join('cursos','inscricaos.idCurso','=','cursos.id')->select('cursos.*','cursos.id as idCurso','alunos.foto as picture')->where('idAluno',$_POST['idAluno'])->where('estado','=','inscrito')->where('ano',$_POST['ano'])->get();
         return  response()->json(array('mensalidade'=> $mensalidade,'mesesNao'=>$mesNaoP,'mesesNaoPagos'=>$mesesNaoPAgos,'inscricao'=>$inscricao,'mensalidade2'=>$mensalidade2));
     }
 
@@ -235,20 +222,9 @@ class MensalidadeController extends Controller{
 
 
     public function salvarMensalidade(Request $request){
-//        'id','valorTotal','estado','mes','anoPago','idMensalidade','idPagamento','idAluno','curso'
 
         $pgm = new PagamntoMensalidade();
         $pgm->create($request->all());
-//        $pgm->valorTotal =$_POST['valorTotal'];
-//        $pgm->estado =$_POST['estado'];
-//        $pgm->mes =$_POST['mes'];
-//        $pgm->anoPago =$_POST['anoPago'];
-//        $pgm->idMensalidade =1;
-//        $pgm->idPagamento =$_POST['idPagamento'];
-//        $pgm->idAluno =$_POST['idAluno'];
-//        $pgm->curso =$_POST['curso'];
-//        $pgm->save();
-
         echo 'salvo com Sucesso';
     }
 
