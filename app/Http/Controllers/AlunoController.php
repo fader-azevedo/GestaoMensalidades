@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Aluno;
 use App\Contacto;
+use App\Def_Mensalidade;
 use App\Inscricao;
 use App\Mensalidade;
 use Illuminate\Http\Request;
@@ -21,10 +22,10 @@ class AlunoController extends Controller{
     }
 
     public function index(){
+        $anos = Def_Mensalidade::query()->pluck('ano');
         $listaAluno = Inscricao::query()->
-        join('alunos','inscricaos.idAluno','=','alunos.id')->distinct()
-            ->select('alunos.*')->where('estado','=','inscrito')->get();
-        return view('aluno.listar',compact('listaAluno'));
+        join('alunos','inscricaos.idAluno','=','alunos.id')->distinct()->select('alunos.*')->where('estado','=','inscrito')->get();
+        return view('aluno.listar',compact('listaAluno','anos'));
     }
 
 

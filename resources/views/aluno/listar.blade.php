@@ -117,10 +117,15 @@
                         <input placeholder="Pesquisar" id="txtPesquisar" type="text" class="validate" onkeyup="filtrar()">
                         {{--<label for="first_name">First Name</label>--}}
                     </div>
-                    <div class="input-field col s6">
-                        <i class="zmdi zmdi-calendar prefix"></i>
-                        <input placeholder="Ano" id="txtAno" type="text">
-                        {{--<label for="first_name">First Name</label>--}}
+                    <div class="input-field col s3">
+                        <div >
+                            <a class="myIcon"><i class="zmdi zmdi-calendar"></i></a>
+                            <select class="material-control2"  id="selectAno">
+                                @foreach($anos as $ano)
+                                    <option value="{{$ano}}">{{$ano}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
