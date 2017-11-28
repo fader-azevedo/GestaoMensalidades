@@ -10,7 +10,7 @@ class TrigerMensalidade extends Migration{
         DB::unprepared('
             CREATE TRIGGER trg_Mensalidade AFTER UPDATE ON `pagamnto_mensalidades` FOR EACH ROW
             BEGIN
-                INSERT INTO `mensalidade_adiantada` (`valorAntigo`,`valorNovo`, `idAluno`,`mes`,`ano`,`curso`) VALUES (OLD.valorTotal,NEW.valorTotal, NEW.idAluno, NEW.mes, NEW.anoPago, NEW.curso);
+                INSERT INTO `mensalidade_adiantada` (`valorAntigo`,`valorNovo`,`valorTotal`, `idAluno`,`mes`,`ano`,`curso`) VALUES (OLD.valorTotal,NEW.valorTotal-OLD.valorTotal,OLD.valorTotal+NEW.valorTotal-OLD.valorTotal, OLD.idAluno, OLD.mes, OLD.anoPago, OLD.curso);
             END '
         );
     }
@@ -19,7 +19,4 @@ class TrigerMensalidade extends Migration{
         DB::unprepared('DROP TRIGGER `trg_Mensalidade`');
     }
 }
-
-
-
 
