@@ -19,6 +19,8 @@ class ExportController extends Controller{
     private $listaDeTurma = array();
     private $listaDeValor=array();
     private $numNaoPagamento=0;
+    private $devedores;
+    private $naoDevedores;
 
     public function __construct(){
 //        $this->tabela =$_GET['tabela'];
@@ -53,26 +55,22 @@ class ExportController extends Controller{
                 }
             }
         }
+        $this->devedores = Inscricao::query()->join('alunos','alunos.id','=','inscricaos.idAluno')->select('alunos.nome as nomeAluno','alunos.*')->whereIn('inscricaos.idAluno',$this->listaIdsAlunos)->get();
+        $this->naoDevedores = PagamntoMensalidade::query()->join('alunos','alunos.id','=','pagamnto_mensalidades.idAluno')->join('turmas','turmas.nomeCurso','=','pagamnto_mensalidades.curso')->select('alunos.nome as nomeAluno','alunos.*','turmas.nome as turma','turmas.nomeCurso as curso','pagamnto_mensalidades.valorTotal as valor','pagamnto_mensalidades.mes','pagamnto_mensalidades.idAluno')->where('mes',$_POST['mes'])->where('anoPago',$_POST['ano'])->get();
     }
 
     public function exportarNaoDevedores(){
-        $naddevedores = PagamntoMensalidade::query()->join('alunos','alunos.id','=','pagamnto_mensalidades.idAluno')->join('turmas','turmas.nomeCurso','=','pagamnto_mensalidades.curso')->select('alunos.nome as nomeAluno','alunos.*','turmas.nome as turma','turmas.nomeCurso as curso','pagamnto_mensalidades.valorTotal as valor','pagamnto_mensalidades.mes','pagamnto_mensalidades.idAluno')->where('mes',$_POST['mes'])->where('anoPago',$_POST['ano'])->get();
-        $pdf = PDF::loadView('export.naodevedores',['dados'=>$naddevedores,'mesAno'=>$this->mesAno]);
+        $pdf = PDF::loadView('export.naodevedores',['dados'=>$this->naoDevedores,'mesAno'=>$this->mesAno]);
         return $pdf->download('naoDevedores_'.$this->mesAno.'.pdf');
     }
 
     public function exportarDevedores(){
-        $devedores = Inscricao::query()->join('alunos','alunos.id','=','inscricaos.idAluno')->select('alunos.nome as nomeAluno','alunos.*')->whereIn('inscricaos.idAluno',$this->listaIdsAlunos)->get();
-        $pdf = PDF::loadView('export.devedores',['devedores'=>$devedores,'mesAno'=>$this->mesAno,'cursos'=>$this->listaCursos,'turma'=>$this->listaDeTurma,'vezes'=>$this->numNaoPagamento,'valor'=>$this->listaDeValor]);
+        $pdf = PDF::loadView('export.devedores',['devedores'=>$this->devedores,'mesAno'=>$this->mesAno,'cursos'=>$this->listaCursos,'turma'=>$this->listaDeTurma,'vezes'=>$this->numNaoPagamento,'valor'=>$this->listaDeValor]);
         return $pdf->download('devedores_'.$this->mesAno.'.pdf');
-//        }
+    }
 
-//        elseif ($this->tabela == 'naodevedor'){
-//            $pdf = PDF::loadView('export.naodevedores',['dados'=>$naddevedores,'mesAno'=>$this->mesAno]);
-//            return $pdf->download('naoDevedores_'.$this->mesAno.'.pdf');
-//        }elseif ($this->tabela == 'todos'){
-//            $pdf = PDF::loadView('export.devsenao',['devedores'=>$devedores,'honestos'=>$naddevedores,'mesAno'=>$this->mesAno,'cursos'=>$this->listaCursos,'turma'=>$this->listaDeTurma,'vezes'=>$this->numNaoPagamento,'valor'=>$this->listaDeValor]);
-//            return $pdf->download('devedrs&NaoDevs_'.$this->mesAno.'.pdf');
-//        }
+    public function exportarAll(){
+        $pdf = PDF::loadView('export.devsenao',['devedores'=>$this->devedores,'honestos'=>$this->naoDevedores,'mesAno'=>$this->mesAno,'cursos'=>$this->listaCursos,'turma'=>$this->listaDeTurma,'vezes'=>$this->numNaoPagamento,'valor'=>$this->listaDeValor]);
+        return $pdf->download('devs&NaoDevs_'.$this->mesAno.'.pdf');
     }
 }

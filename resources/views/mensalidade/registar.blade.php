@@ -276,6 +276,8 @@
     <script type="text/javascript">
         $(document).ready(function() {
 
+            var numMeseAPagar = JSON.parse("{{json_encode($intervalo)}}");
+
             $.ajaxSetup({
                 headers:{
                     'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
@@ -391,9 +393,11 @@
                     type: 'POST',
                     data: {'idAluno': idAluno, 'curso': curso, 'ano': ano},
                     success: function (dados) {
+
+
+
                         var mesess = ''; var control=0;
                         for (var m = 0; m < dados.meses.length; m++) {
-//                            alert(dados.meses[m].mes);
                             /*Quando nao fez adiantamento*/
                             if (dados.meses[m].estado === 'pago') {
                                 $('#DivMeses').append(' <div class="mes"><label class="label label-success">' + dados.meses[m].mes + '</label></div>');
@@ -408,6 +412,12 @@
                                 $('#DivMeses').append(' <div class="mes"><label class="label label-warning">' + dados.meses[m].mes + '</label></div>');
                             }
                         }
+
+                        /*Quando ja efectuou todos os pagamentos*/
+                        if(numMeseAPagar === dados.meses.length){
+                            return;
+                        }
+
                         if(control ===0) {
                             document.getElementById('mesAdiantado').value =  dados.mesdAno[0].nome;
                             $('#selectMes').append('<option  selected="selected"  class="ms adiantado" value=' + dados.mesdAno[0].nome + '>' + dados.mesdAno[0].nome + '</option>');

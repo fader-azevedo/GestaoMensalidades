@@ -119,7 +119,7 @@ class MensalidadeController extends Controller{
         join('alunos','inscricaos.idAluno','=','alunos.id')->distinct()
             ->select('alunos.*')->where('estado','=','inscrito')->get();
 
-        return view('mensalidade.registar',['alu'=>$alunnosInscritos]);
+        return view('mensalidade.registar',['alu'=>$alunnosInscritos,'intervalo'=>$this->intervalo+1]);
     }
 
     public function getDevedoresMes(){

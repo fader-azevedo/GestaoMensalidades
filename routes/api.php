@@ -47,3 +47,4 @@ Route::post('/updateMensalidade','MensalidadeController@updateMensalidade');
 /*ExportPDF*/
 Route::post('/exportarDevedores','ExportController@exportarDevedores');
 Route::post('/exportarNaoDevedores','ExportController@exportarNaoDevedores');
+Route::post('/exportarAll','ExportController@exportarAll');

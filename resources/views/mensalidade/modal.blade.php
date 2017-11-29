@@ -86,7 +86,13 @@
     var ano = document.getElementById('selectAno').value;
     $('#ExportPdfAll').click(function () {
         var mes = document.getElementById('inputMes').value;
-        window.location ='/exportDevedoresPDF?mes='+mes+'&ano='+ano+'&tabela=todos';
+        $.ajax({
+            url:'/api/exportarAll',
+            type:'POST',
+            data:{'mes':mes,'ano':ano}
+        });
+//        exportarAll
+//        window.location ='/exportDevedoresPDF?mes='+mes+'&ano='+ano+'&tabela=todos';
     });
 
     $('#ExportExcelAll').click(function () {

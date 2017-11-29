@@ -370,7 +370,6 @@
                     type:'POST',
                     data:{'mes':mesPago,'ano':ano}
                 });
-//                window.location ='/exportDevedoresPDF?mes='+mesPago+'&ano='+ano+'&tabela=naodevedor';
             });
 
 
@@ -378,7 +377,6 @@
             /*Mais detalhes*/
             $('.btn-detalhes').click(function () {
                 var mes= $(this).attr('data-mes');
-
                 $.ajax({
                     url: '/api/getDevedoresMes',
                     type: 'POST',

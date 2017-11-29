@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html>
+
+{{--<img id="" class="" src="{!! asset('img/user.jpg') !!}" alt="">--}}
+
     <head>
         <meta charset=utf-8"/>
         <style>
-            td{
-                margin: -5px;
+            th,td{
+                text-align: center;
             }
             table{
                 margin-left: -20px;
+                border: none;
             }
         </style>
-        <link type="text/css" rel="stylesheet" href="css/export.css">
     </head>
 
     <body>
-        <h2>Alunos Devedores & Não Devedores</h2>
-        <h3>{{$mesAno}}</h3>
-        <table border="2" style="width: 104%" id="tabelaAll">
+        <h2 style="text-align: center;     border: 1px solid #9d9d9d;     background-color: #9d9d9d;">Alunos Devedores & Não Devedores</h2>
+        <h3 style="text-align: right">{{$mesAno}}</h3>
+        <table border="1" style="width: 104%" id="tabelaAll">
             <thead>
             <tr>
                 <th style="width: 15%"></th>
@@ -49,7 +52,7 @@
                     @endfor
                 </td>
 
-                <td style="height: 110px; border: 2px solid #89ccdf; font-size: 25px"><?php echo number_format($totalDivida,2).' Mt'?></td>
+                <td style="height: 110px; font-size: 25px"><?php echo number_format($totalDivida,2).' Mt'?></td>
             </tr>
             <tr>
                 <td style="height: 110px; border: 2px solid #89ccdf; font-size: 25px">Não Devedores</td>
