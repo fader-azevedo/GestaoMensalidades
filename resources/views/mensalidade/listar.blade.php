@@ -110,7 +110,7 @@
     <div class="nav-tabs-custom" style="background-color: #f2f2f2">
         <ul class="nav nav-tabs ">
             <li class="pull-left active"><a data-slide-to="0" href="#carousellDiv" data-toggle="tab"><i style="color: #00a7d0" class="fa fa-list"></i>&nbsp;Todas</a></li>
-            <li><a data-slide-to="1" href="#carousellDiv" data-toggle="tab"><i style="color: #00a7d0" class="fa fa-user"></i>&nbsp;Por Aluno</a></li>
+            <li><a class="" data-slide-to="1" href="#carousellDiv" data-toggle="tab"><i style="color: #59c0d0" class="fa fa-user"></i>&nbsp;Por Aluno</a></li>
             <li style="width: 100px;">
                 <div >
                     <a class="myIcon"><i class="zmdi zmdi-calendar"></i></a>
@@ -264,12 +264,15 @@
             $('#alertExport').hide();
             var ano = document.getElementById('selectAno').value;
 
+            var arr = formatarData(new Date()).split('-');
+            preencherAlunosDevedores(arr[1],arr[2]);
+
             /*Lista todos Devedores de um mes especifico */
-            $('.btn-devedor').on('click', function(){
+
+            function preencherAlunosDevedores(mes, ano) {
                 $('#boxNaoDevedor').addClass('collapsed-box').slideUp();
                 $('#boxDevedor').removeClass('collapsed-box').slideDown();
 
-                var mes= $(this).attr('data-mes');
                 $.ajax({
                     url: '/api/getDevedoresMes',
                     type: 'POST',
@@ -289,6 +292,10 @@
                         }
                     }
                 })
+            }
+            $('.btn-devedor').on('click', function(){
+                var mes= $(this).attr('data-mes');
+                preencherAlunosDevedores(mes,ano);
             });
             /*lista todos nao devedores*/
             $('.btn-nao-devedor').on('click', function () {

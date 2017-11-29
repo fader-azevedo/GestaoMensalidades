@@ -159,8 +159,9 @@
         <div class="col-sm-5 col-md-5 col-lg-5">
             <div class="box box-widget widget-user" style="display: flex; padding: 5px; background-color: #f5f5f5;">
                 <div class="col-sm-9 text-center" id="divFoto" style="margin-left: -20px">
-                    <img id="idFoto" class="img-rounded" src="{!! asset('img/user.jpg') !!}" alt="" height="150"><br/><br/>
-                    <h6 style="margin: -10px 0 0 1px; font-size: 19px" class=" label-default" id="nomeAluno">Nome</h6>
+{{--                    <img id="idFoto" class="img-rounded" src="{!! asset('img/user.jpg') !!}" alt="" height="150"><br/><br/>--}}
+                    <img id="idFoto" class="img-circle" src="{!! asset('img/pic.jpg') !!}" alt="" height="150"><br/><br/>
+                    <h6 style="margin: -10px 0 0 1px; font-size: 19px" class="label label-default" id="nomeAluno">Nome</h6>
                 </div>
                 <div class="col-sm-12 box" style="padding: 2px">
                     <ul class="todo-list" id="contacto">

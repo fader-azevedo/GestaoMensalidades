@@ -19,8 +19,5 @@ class Aluno extends Model{
         return DB::table('alunos')->find($id);
     }
 
-    public function getMensalidade(){
-//        return $this->hasMany(Mensalidade::class,'idAluno');
-    }
 
 }

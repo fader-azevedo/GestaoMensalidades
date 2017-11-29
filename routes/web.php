@@ -50,8 +50,6 @@ Route::get('exportDevedoresPDF',function (){
     }
     $mesAno = $_GET['mes'].'-'.$_GET['ano'];
     $idAlunoInscritos = Inscricao::query()->where('estado','<>','pre-inscrito')->distinct()->pluck('idAluno')->toArray();
-//        $arr = array_merge($idAlunosHonestos,$idAlunoNaoInscrito);
-//        sort($arr);
     sort($idAlunoInscritos);
 
     $numNaoPagamento=0;
@@ -128,11 +126,10 @@ Route::get('exportAluno',function (){
 
     return $pdf->download($codigo.'_'.$curso.'.pdf');
 });
-//Route::post('salvarPagamento','PagamentoController@salvarPagamento')->name('salvarPagamento');
-//Route::resource('salvarPagamento','PagamentoController@salvarPagamento')->name('salvarPagamento');
 
 Route::post('/salvarPagamento','PagamentoController@salvarPagamento');
 Route::post('/salvarMensalidade','MensalidadeController@salvarMensalidade');
+Route::get('ok','AlunoController@salvarPreInscricao');
 //Route::post('/updateMensalidade','MensalidadeController@updateMensalidade');
 
 
