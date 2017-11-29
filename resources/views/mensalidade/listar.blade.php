@@ -341,7 +341,11 @@
                     return;
                 }
                 var mesDev =  document.getElementById('tiluloMesDivida').innerHTML;
-                window.location ='/'+'exportDevedoresPDF?mes='+mesDev+'&ano='+ano+'&tabela=devedor';
+                $.ajax({
+                    url:'/api/exportarDevedores',
+                    type:'POST',
+                    data:{'mes':mesDev,'ano':ano}
+                });
             });
 
             /*Exportacao de tabela no devedores para excel e pdf*/
@@ -361,8 +365,14 @@
                     return;
                 }
                 var mesPago =  document.getElementById('tiluloMesPago').innerHTML;
-                window.location ='/exportDevedoresPDF?mes='+mesPago+'&ano='+ano+'&tabela=naodevedor';
+                $.ajax({
+                    url:'/api/exportarNaoDevedores',
+                    type:'POST',
+                    data:{'mes':mesPago,'ano':ano}
+                });
+//                window.location ='/exportDevedoresPDF?mes='+mesPago+'&ano='+ano+'&tabela=naodevedor';
             });
+
 
             
             /*Mais detalhes*/

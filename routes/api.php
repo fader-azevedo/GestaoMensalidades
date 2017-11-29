@@ -43,3 +43,7 @@ Route::post('getMeses','MensalidadeController@getMeses')->name('getMeses');
 Route::post('/getInscricao','InscricaoController@getInscricao');
 Route::post('/getDadosInscricao','InscricaoController@getDadosInscricao');
 Route::post('/updateMensalidade','MensalidadeController@updateMensalidade');
+
+/*ExportPDF*/
+Route::post('/exportarDevedores','ExportController@exportarDevedores');
+Route::post('/exportarNaoDevedores','ExportController@exportarNaoDevedores');
