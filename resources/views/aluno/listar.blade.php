@@ -222,17 +222,25 @@
             </div>
         </div>
     </section>
+    <input type="hidden" value="0" id="idAl">
 @endsection
 
 @section('scripts')
     <script type="text/javascript">
         $('.btn-ver').click(function () {
             var idAluno = $(this).attr('data-id');
+
             $.ajax({
                 url: '/api/getInscricao',
                 type: 'POST',
                 data: {'idAluno': idAluno,'ano':2017},
                 success: function (rs) {
+
+                    var ultimoId = parseInt(document.getElementById('idAl').value);
+                    if(idAluno == ultimoId){
+                        return;
+                    }
+                    document.getElementById('idAl').value = idAluno;
                     $('.cont').remove();
                     $('.crs').remove();
                     $('#divFoto').addClass('collapsed-box').slideUp();

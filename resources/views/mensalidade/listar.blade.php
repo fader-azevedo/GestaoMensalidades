@@ -146,13 +146,15 @@
                                         </tr>
                                     @endforeach
 
-                                    @foreach($mesesAPagar as $ot)
-                                        <tr>
-                                            <td>{{$ot}}</td>
-                                            <td><a disabled="disabled" class="btn btn-default"><i class="fa fa-check"></i>&nbsp;0</a></td>
-                                            <td><a disabled="disabled" class="btn btn-default"><i class="zmdi zmdi-close"></i>&nbsp;{{\App\Inscricao::query()->where('estado','=','inscrito')->count()}}</a></td>
-                                            <td><a disabled="disabled" class="btn btn-default"><i class="zmdi zmdi-library"></i>&nbsp;&nbsp;Sem registo&nbsp;&nbsp;</a></td>
-                                        </tr>
+                                    @foreach($mesesAPagar as $mes)
+                                        @if($mes !== '')
+                                            <tr>
+                                                <td>{{$mes}}</td>
+                                                <td><a disabled="disabled" class="btn btn-default"><i class="fa fa-check"></i>&nbsp;0</a></td>
+                                                <td><a disabled="disabled" class="btn btn-default"><i class="zmdi zmdi-close"></i>&nbsp;{{\App\Inscricao::query()->where('estado','=','inscrito')->count()}}</a></td>
+                                                <td><a disabled="disabled" class="btn btn-default"><i class="zmdi zmdi-library"></i>&nbsp;&nbsp;Sem registo&nbsp;&nbsp;</a></td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 </tbody>
                             </table>
@@ -260,7 +262,6 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            /*Action de tabela de devedores*/
             $('#alertExport').hide();
             var ano = document.getElementById('selectAno').value;
 
