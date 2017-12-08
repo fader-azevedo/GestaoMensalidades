@@ -112,13 +112,8 @@ class MensalidadeController extends Controller{
         return  response()->json(array('meses'=>$meses,'mesdAno'=>$mesNaoP));
     }
 
-
-
     public function registarMensalidade(){
-        $alunnosInscritos = Inscricao::query()->
-        join('alunos','inscricaos.idAluno','=','alunos.id')->distinct()
-            ->select('alunos.*')->where('estado','=','inscrito')->get();
-
+        $alunnosInscritos = Inscricao::query()->join('alunos','inscricaos.idAluno','=','alunos.id')->distinct()->select('alunos.*')->where('estado','=','inscrito')->get();
         return view('mensalidade.registar',['alu'=>$alunnosInscritos,'intervalo'=>$this->intervalo+1]);
     }
 
@@ -197,18 +192,17 @@ class MensalidadeController extends Controller{
     }
 
     public function getMesesPagos($ano){
-        $mesesPagos = PagamntoMensalidade::query()->distinct()->select('mes')->where('anoPago',$ano)->get();
-        return $mesesPagos;
+        return PagamntoMensalidade::query()->distinct()->select('mes')->where('anoPago',$ano)->get();
     }
 
     public function getModal(){
         return view('mensalidade.modal');
     }
 
-    public function getValorAdiantado(){
-        $adiantado = PagamntoMensalidade::query()->where('idAluno',$_POST['idAluno'])->where('curso',$_POST['curso'])->where('anoPago',$_POST['ano'])->sum('divida');
-        echo $adiantado;
-    }
+//    public function getValorAdiantado(){
+//        $adiantado = PagamntoMensalidade::query()->where('idAluno',$_POST['idAluno'])->where('curso',$_POST['curso'])->where('anoPago',$_POST['ano'])->sum('divida');
+//        echo $adiantado;
+//    }
 
     public function getDividas(){
 

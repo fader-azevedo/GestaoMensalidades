@@ -9,7 +9,7 @@
         {{--<meta name="csrf-token" content="{{csrf_token()}}">--}}
         <meta name="_token" content="{{csrf_token()}}">
 
-        <title>Gestão de Mensalidades 2</title>
+        <title>Gestão de Mensalidades</title>
 
         <link rel="stylesheet" type="text/css" href="{!! asset('css/bootstrap.css') !!}"/>
         <link rel="stylesheet" type="text/css" href="{!! asset('font-awesome/css/font-awesome.css')!!}"  />
@@ -111,7 +111,6 @@
                 <section class="sidebar">
                     <ul class="sidebar-menu" data-widget="tree" style="margin-top: 50px">
                         @yield('menu')
-
                     </ul>
                 </section>
             </aside>
@@ -145,11 +144,7 @@
                     </div>
                 </section>
             </div>
-            <!-- /.content-wrapper -->
             <footer class="main-footer">
-                {{--<div class="pull-right hidden-xs">--}}
-                    {{--<b>Versão</b> 0.1--}}
-                {{--</div>--}}
                 <strong class="centered">Sistema de Gestão de Mensalidades<a href=""></a>.</strong>
             </footer>
         </div>
