@@ -1,7 +1,7 @@
 /**
  * jsPDF
  * (c) 2009 James Hall
- * 
+ *  fader azevedo
  * Some parts based on FPDF.
  */
 
